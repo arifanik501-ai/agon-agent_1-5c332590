@@ -1,0 +1,64 @@
+{
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://jcunkiuijhtvqnkhvqio.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_kQhl60sIV0Q2X5OR3ymrXQ_rRN8ArFR",
+    "SUPABASE_SERVICE_ROLE_KEY": "sb_secret_D2Qpmz_XjazJeTOwRcuPaA_KkX7qTdy",
+    "VITE_SUPABASE_URL": "https://jcunkiuijhtvqnkhvqio.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "sb_publishable_kQhl60sIV0Q2X5OR3ymrXQ_rRN8ArFR",
+    "VITE_GOOGLE_CLIENT_ID": "1065078894672-rmp5kp8vfjns5rn9kp5psfp16g691043.apps.googleusercontent.com",
+    "VITE_GOOGLE_AUTH_PROXY": "https://designarena.ai/auth/google/callback",
+    "VAPID_PUBLIC_KEY": "BNBbxmr-UxBxikcqRLrZXfNRvKmRuoi1R_gzTxgexnR3ExnqczILs4t17Nj3m0VmQosSlDvYtc9dgdP8pxYDcn8",
+    "VAPID_PRIVATE_KEY": "YV6wf1BoYNs2OZIv39gaXTzWTq6g4gIud7glIEneTJk",
+    "VITE_VAPID_PUBLIC_KEY": "BNBbxmr-UxBxikcqRLrZXfNRvKmRuoi1R_gzTxgexnR3ExnqczILs4t17Nj3m0VmQosSlDvYtc9dgdP8pxYDcn8"
+  },
+  "headers": [
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
