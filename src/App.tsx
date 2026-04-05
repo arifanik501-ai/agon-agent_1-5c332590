@@ -61,7 +61,7 @@ function SyncPill({ status }: { status: SyncStatus }) {
       style={{
         position: 'fixed',
         top: 'calc(env(safe-area-inset-top, 0px) + 16px)',
-        left: '50%',
+        left: 'calc(50% - 50px)',
         transform: 'translateX(-50%)',
         zIndex: 600,
         display: 'flex', alignItems: 'center', gap: 8,
