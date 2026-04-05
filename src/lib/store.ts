@@ -26,6 +26,7 @@ export interface AppState {
   pushEnabled?: boolean;
   visitCount: number;
   highFps?: boolean;
+  lightMode?: boolean;
 }
 
 export const DEFAULT_STATE: AppState = {
@@ -38,6 +39,7 @@ export const DEFAULT_STATE: AppState = {
   pushEnabled: false,
   visitCount: 0,
   highFps: false,
+  lightMode: false,
 };
 
 // ── localStorage helpers ─────────────────────────────────────────────────────
@@ -73,6 +75,7 @@ export function mergeStates(local: AppState, cloud: AppState): AppState {
     pushEnabled: local.pushEnabled ?? cloud.pushEnabled,
     visitCount: Math.max(local.visitCount ?? 0, cloud.visitCount ?? 0),
     highFps: local.highFps ?? cloud.highFps,
+    lightMode: local.lightMode ?? cloud.lightMode,
   };
 }
 

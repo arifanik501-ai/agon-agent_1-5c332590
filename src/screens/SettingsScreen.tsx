@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Lock, Smartphone, RefreshCw, CloudCheck, AlertCircle, ChevronLeft, Zap } from 'lucide-react';
+import { Bell, Lock, Smartphone, RefreshCw, CloudCheck, AlertCircle, ChevronLeft, Zap, Sun, Moon } from 'lucide-react';
 import type { AppState } from '../lib/store';
 import { getDayNumber, formatTime12, pushToCloud, loadState } from '../lib/store';
 import { requestNotificationPermission, sendTestNotification } from '../lib/notifications';
@@ -29,14 +29,14 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
   }
 
   const card: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.06)',
-    backdropFilter: 'blur(40px) saturate(180%)',
-    WebkitBackdropFilter: 'blur(40px) saturate(180%)',
-    border: '1px solid rgba(255,255,255,0.12)',
-    borderRadius: 22,
+    background: 'var(--surface-glass)',
+    backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-saturate))',
+    WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-saturate))',
+    border: '1px solid var(--border-glass)',
+    borderRadius: 'var(--glass-radius)',
     padding: '18px 20px',
     marginBottom: 12,
-    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.08), inset 0 -1px 1px rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.25)',
+    boxShadow: 'var(--glass-inner-shadow), var(--card-shadow)',
     position: 'relative' as const,
     overflow: 'hidden' as const,
   };
@@ -71,10 +71,10 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
         >
           <ChevronLeft size={16} /> Dashboard
         </button>
-        <div style={{ fontSize: 11, color: 'rgba(240,240,248,0.4)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4, fontWeight: 600 }}>
+        <div style={{ fontSize: 11, color: 'var(--text-sub)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4, fontWeight: 600 }}>
           Settings
         </div>
-        <h1 style={{ fontSize: 26, fontWeight: 900, color: '#F0F0F8', margin: 0 }}>
+        <h1 style={{ fontSize: 26, fontWeight: 900, color: 'var(--text)', margin: 0 }}>
           App <span className="gradient-text">Config</span>
         </h1>
       </motion.div>
@@ -127,7 +127,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
           <div style={{ flex: 1 }}>
             <div style={{
               fontSize: 15, fontWeight: 700,
-              color: syncState === 'done' ? '#10B981' : syncState === 'error' ? '#EF4444' : '#F0F0F8',
+              color: syncState === 'done' ? '#10B981' : syncState === 'error' ? '#EF4444' : 'var(--text)',
               transition: 'color 0.3s ease',
             }}>
               {syncState === 'syncing' ? 'Syncing…'
@@ -135,7 +135,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                 : syncState === 'error' ? 'Sync Failed'
                 : 'Sync & Refresh'}
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.45)', marginTop: 2 }}>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
               {syncState === 'done' ? 'All data saved to cloud'
                 : syncState === 'error' ? 'Check connection and retry'
                 : 'Pull latest data from cloud & push local changes'}
@@ -185,10 +185,10 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             <Lock size={20} color={locked ? '#9B59F5' : '#10B981'} />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F0F8' }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>
               {locked ? 'Commitment Locked' : 'Not Locked'}
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.45)', marginTop: 2 }}>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
               {locked ? isDemo ? 'Demo Mode Active · Challenge starts soon' : `Day ${currentDay}/30 · ${daysLeft} days remaining` : 'Complete setup to lock'}
             </div>
           </div>
@@ -217,8 +217,8 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <div style={{
             width: 44, height: 44, borderRadius: 12,
-            background: state.pushEnabled ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.05)',
-            border: `1px solid ${state.pushEnabled ? 'rgba(16,185,129,0.28)' : 'rgba(255,255,255,0.1)'}`,
+            background: state.pushEnabled ? 'rgba(16,185,129,0.12)' : 'var(--surface)',
+            border: `1px solid ${state.pushEnabled ? 'rgba(16,185,129,0.28)' : 'var(--border)'}`,
             boxShadow: state.pushEnabled ? '0 0 16px rgba(16,185,129,0.15)' : 'none',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'all 0.3s ease',
@@ -226,7 +226,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             <Bell size={20} color={state.pushEnabled ? '#10B981' : '#6B7280'} strokeWidth={state.pushEnabled ? 2.5 : 2} />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: state.pushEnabled ? '#34D399' : '#F0F0F8', transition: 'color 0.3s ease', display: 'flex', alignItems: 'center' }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: state.pushEnabled ? '#34D399' : 'var(--text)', transition: 'color 0.3s ease', display: 'flex', alignItems: 'center' }}>
               Push Notifications
               {state.pushEnabled && (
                 <span onClick={async (e) => { e.stopPropagation(); await sendTestNotification(); }} 
@@ -235,7 +235,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                 </span>
               )}
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.45)', marginTop: 2 }}>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
               {state.pushEnabled ? 'Enabled — reminders active' : (notificationPermission === 'denied' || ('Notification' in window && Notification.permission === 'denied')) ? 'Denied in device browser settings' : 'Background reminders disabled'}
             </div>
           </div>
@@ -266,8 +266,8 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             }}
             style={{
               width: 50, height: 28, borderRadius: 16,
-              background: state.pushEnabled ? '#10B981' : 'rgba(255,255,255,0.1)',
-              border: state.pushEnabled ? '1px solid #34D399' : '1px solid rgba(255,255,255,0.2)',
+              background: state.pushEnabled ? '#10B981' : 'var(--border)',
+              border: state.pushEnabled ? '1px solid #34D399' : '1px solid var(--border-hi)',
               position: 'relative', cursor: 'pointer',
               transition: 'all 0.3s ease',
               boxShadow: state.pushEnabled ? '0 0 12px rgba(16,185,129,0.4)' : 'inset 0 1px 3px rgba(0,0,0,0.2)',
@@ -293,8 +293,8 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <div style={{
             width: 44, height: 44, borderRadius: 12,
-            background: state.highFps ? 'rgba(6,182,212,0.12)' : 'rgba(255,255,255,0.05)',
-            border: `1px solid ${state.highFps ? 'rgba(6,182,212,0.28)' : 'rgba(255,255,255,0.1)'}`,
+            background: state.highFps ? 'rgba(6,182,212,0.12)' : 'var(--surface)',
+            border: `1px solid ${state.highFps ? 'rgba(6,182,212,0.28)' : 'var(--border)'}`,
             boxShadow: state.highFps ? '0 0 16px rgba(6,182,212,0.15)' : 'none',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'all 0.3s ease',
@@ -302,8 +302,8 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             <Zap size={20} color={state.highFps ? '#06B6D4' : '#6B7280'} strokeWidth={state.highFps ? 2.5 : 2} />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: state.highFps ? '#22D3EE' : '#F0F0F8', transition: 'color 0.3s ease' }}>120Hz Liquid Mode</div>
-            <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.45)', marginTop: 2 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: state.highFps ? '#22D3EE' : 'var(--text)', transition: 'color 0.3s ease' }}>120Hz Liquid Mode</div>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
               Maximize animation fluidity and GPU acceleration
             </div>
           </div>
@@ -311,8 +311,8 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             onClick={() => onStateChange({ ...state, highFps: !state.highFps })}
             style={{
               width: 50, height: 28, borderRadius: 16,
-              background: state.highFps ? '#06B6D4' : 'rgba(255,255,255,0.1)',
-              border: state.highFps ? '1px solid #22D3EE' : '1px solid rgba(255,255,255,0.2)',
+              background: state.highFps ? '#06B6D4' : 'var(--border)',
+              border: state.highFps ? '1px solid #22D3EE' : '1px solid var(--border-hi)',
               position: 'relative', cursor: 'pointer',
               transition: 'all 0.3s ease',
               boxShadow: state.highFps ? '0 0 12px rgba(6,182,212,0.4)' : 'inset 0 1px 3px rgba(0,0,0,0.2)',
@@ -329,6 +329,58 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
         </div>
       </motion.div>
 
+      {/* ── Theme Mode ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.19, ease: [0.22, 1, 0.36, 1] }}
+        style={card}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{
+            width: 44, height: 44, borderRadius: 12,
+            background: state.lightMode ? 'rgba(217,119,6,0.12)' : 'var(--surface)',
+            border: `1px solid ${state.lightMode ? 'rgba(217,119,6,0.28)' : 'var(--border)'}`,
+            boxShadow: state.lightMode ? '0 0 16px rgba(217,119,6,0.15)' : 'none',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'all 0.3s ease',
+          }}>
+            {state.lightMode ? (
+              <Sun size={20} color="#D97706" strokeWidth={2.5} />
+            ) : (
+              <Moon size={20} color="var(--text)" strokeWidth={2} />
+            )}
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: state.lightMode ? '#D97706' : 'var(--text)', transition: 'color 0.3s ease' }}>
+              Theme
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
+              {state.lightMode ? 'Light Mode active' : 'Dark Mode (Deep Space)'}
+            </div>
+          </div>
+          <button
+            onClick={() => onStateChange({ ...state, lightMode: !state.lightMode })}
+            style={{
+              width: 50, height: 28, borderRadius: 16,
+              background: state.lightMode ? '#D97706' : 'var(--border)',
+              border: state.lightMode ? '1px solid #F59E0B' : '1px solid var(--border-hi)',
+              position: 'relative', cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: state.lightMode ? '0 0 12px rgba(217,119,6,0.4)' : 'inset 0 1px 3px rgba(0,0,0,0.2)',
+            }}
+          >
+            <div style={{
+              width: 22, height: 22, borderRadius: '50%',
+              background: '#FFF',
+              position: 'absolute', top: 2, left: state.lightMode ? 24 : 2,
+              transition: 'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+            }} />
+          </button>
+        </div>
+      </motion.div>
+
       {/* ── Task list ── */}
       {tasks.length > 0 && (
         <motion.div
@@ -337,7 +389,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
           transition={{ duration: 0.4, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
           style={{ marginBottom: 12 }}
         >
-          <div style={{ fontSize: 11, color: 'rgba(240,240,248,0.4)', marginBottom: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 11, color: 'var(--text-sub)', marginBottom: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             {locked ? 'Locked Tasks' : 'Your Tasks'} ({tasks.length})
           </div>
           {tasks.map((task, i) => (
@@ -359,10 +411,10 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                 {i + 1}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#F0F0F8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {task.name}
                 </div>
-                <div style={{ fontSize: 11, color: 'rgba(240,240,248,0.4)' }}>{formatTime12(task.time)}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-sub)' }}>{formatTime12(task.time)}</div>
               </div>
               {locked && <Lock size={13} color="rgba(240,240,248,0.2)" />}
             </div>
@@ -386,8 +438,8 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             <Smartphone size={20} color="#9B59F5" />
           </div>
           <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F0F8' }}>30 Days Goal</div>
-            <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.4)', marginTop: 2 }}>30-Day Habit Commitment · v2.0</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>30 Days Goal</div>
+            <div style={{ fontSize: 12, color: 'var(--text-sub)', marginTop: 2 }}>30-Day Habit Commitment · v2.0</div>
           </div>
         </div>
       </motion.div>

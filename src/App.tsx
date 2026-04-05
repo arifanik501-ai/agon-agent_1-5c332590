@@ -144,6 +144,12 @@ export default function App() {
     else document.body.classList.remove('high-fps-mode');
   }, [state.highFps]);
 
+  // Sync Light Mode
+  useEffect(() => {
+    if (state.lightMode) document.body.classList.add('light');
+    else document.body.classList.remove('light');
+  }, [state.lightMode]);
+
   // Notification prompt
   useEffect(() => {
     if (cloudLoaded && state.notificationPermission === 'default' && state.visitCount <= 2) {
