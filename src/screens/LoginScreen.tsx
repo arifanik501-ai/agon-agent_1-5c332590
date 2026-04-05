@@ -44,7 +44,6 @@ export default function LoginScreen({ onAuthenticated }: Props) {
   }
 
   const filled = code.filter(d => d !== '').length;
-  const accentColor = status === 'error' ? 'var(--red)' : status === 'success' ? 'var(--green)' : 'var(--violet)';
 
   return (
     <div style={{

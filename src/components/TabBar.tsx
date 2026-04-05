@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 import { Home, BarChart2, Settings } from 'lucide-react';
 
@@ -16,7 +16,6 @@ const PAD = 6;
 
 export default function TabBar({ active, onChange }: Props) {
   const activeIndex = tabs.findIndex(t => t.id === active);
-  const [prevIndex, setPrevIndex] = useState(activeIndex);
 
   // Spring-driven x position for liquid feel
   const springX = useSpring(activeIndex * (TAB_WIDTH + GAP), {
@@ -39,11 +38,9 @@ export default function TabBar({ active, onChange }: Props) {
 
   useEffect(() => {
     springX.set(activeIndex * (TAB_WIDTH + GAP));
-    setPrevIndex(activeIndex);
   }, [activeIndex]);
 
   // Direction for skew effect
-  const direction = activeIndex > prevIndex ? 1 : activeIndex < prevIndex ? -1 : 0;
   const skewDeg = useTransform(springX, (latest) => {
     const target = activeIndex * (TAB_WIDTH + GAP);
     const dist = latest - target;
@@ -108,7 +105,7 @@ export default function TabBar({ active, onChange }: Props) {
           </div>
         </motion.div>
 
-        {tabs.map(({ id, icon: Icon, label }, i) => {
+        {tabs.map(({ id, icon: Icon, label }) => {
           const isActive = active === id;
           return (
             <motion.button
