@@ -4,6 +4,7 @@ import { Bell, Lock, Smartphone, RefreshCw, CloudCheck, AlertCircle, ChevronLeft
 import type { AppState } from '../lib/store';
 import { getDayNumber, formatTime12, pushToCloud, loadState } from '../lib/store';
 import { requestNotificationPermission, sendTestNotification } from '../lib/notifications';
+import ThemeSwitch from '../components/ThemeSwitch';
 
 interface Props {
   state: AppState;
@@ -339,45 +340,30 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <div style={{
             width: 44, height: 44, borderRadius: 12,
-            background: state.lightMode ? 'rgba(217,119,6,0.12)' : 'var(--surface)',
-            border: `1px solid ${state.lightMode ? 'rgba(217,119,6,0.28)' : 'var(--border)'}`,
-            boxShadow: state.lightMode ? '0 0 16px rgba(217,119,6,0.15)' : 'none',
+            background: state.lightMode ? 'rgba(56,189,248,0.12)' : 'var(--surface)',
+            border: `1px solid ${state.lightMode ? 'rgba(56,189,248,0.28)' : 'var(--border)'}`,
+            boxShadow: state.lightMode ? '0 0 16px rgba(56,189,248,0.15)' : 'none',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'all 0.3s ease',
           }}>
             {state.lightMode ? (
-              <Sun size={20} color="#D97706" strokeWidth={2.5} />
+              <Sun size={20} color="#0EA5E9" strokeWidth={2.5} />
             ) : (
               <Moon size={20} color="var(--text)" strokeWidth={2} />
             )}
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: state.lightMode ? '#D97706' : 'var(--text)', transition: 'color 0.3s ease' }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: state.lightMode ? '#0284C7' : 'var(--text)', transition: 'color 0.3s ease' }}>
               Theme
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
-              {state.lightMode ? 'Light Mode active' : 'Dark Mode (Deep Space)'}
+              {state.lightMode ? 'Light Mode — Daylight' : 'Dark Mode — Deep Space'}
             </div>
           </div>
-          <button
-            onClick={() => onStateChange({ ...state, lightMode: !state.lightMode })}
-            style={{
-              width: 50, height: 28, borderRadius: 16,
-              background: state.lightMode ? '#D97706' : 'var(--border)',
-              border: state.lightMode ? '1px solid #F59E0B' : '1px solid var(--border-hi)',
-              position: 'relative', cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: state.lightMode ? '0 0 12px rgba(217,119,6,0.4)' : 'inset 0 1px 3px rgba(0,0,0,0.2)',
-            }}
-          >
-            <div style={{
-              width: 22, height: 22, borderRadius: '50%',
-              background: '#FFF',
-              position: 'absolute', top: 2, left: state.lightMode ? 24 : 2,
-              transition: 'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-            }} />
-          </button>
+          <ThemeSwitch
+            isLight={!!state.lightMode}
+            onToggle={() => onStateChange({ ...state, lightMode: !state.lightMode })}
+          />
         </div>
       </motion.div>
 
