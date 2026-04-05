@@ -105,6 +105,7 @@ export default function App() {
   const [showNotifPrompt, setShowNotifPrompt] = useState(false);
   const [alarm, setAlarm] = useState<{ task: Task; taskIndex: number; dayNum: number } | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [ready, setReady] = useState(false);
 
   const stateRef = useRef(state);
   useEffect(() => { stateRef.current = state; }, [state]);
@@ -134,8 +135,10 @@ export default function App() {
           return merged;
         });
         setCloudLoaded(true);
+        // Small delay so merged state settles before first paint
+        setTimeout(() => setReady(true), 150);
       })
-      .catch(() => { setSyncStatus('error'); setCloudLoaded(true); });
+      .catch(() => { setSyncStatus('error'); setCloudLoaded(true); setReady(true); });
   }, []);
 
   // Sync 120Hz mode preference to body class
@@ -193,8 +196,9 @@ export default function App() {
           });
           return merged;
         });
+        setTimeout(() => setReady(true), 150);
       })
-      .catch(() => { pushToCloud(stateRef.current).then(ok => setSyncStatus(ok ? 'saved' : 'error')); });
+      .catch(() => { pushToCloud(stateRef.current).then(ok => setSyncStatus(ok ? 'saved' : 'error')); setReady(true); });
   }
 
   function handleTasksChange(tasks: Task[]) { updateState({ ...stateRef.current, tasks }); }
@@ -265,6 +269,31 @@ export default function App() {
       </AnimatePresence>
 
       {/* Main */}
+      {authenticated && !ready && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 150,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 18,
+          background: 'var(--bg)',
+        }}>
+          <AmbientBackground />
+          <div style={{
+            width: 56, height: 56, borderRadius: 18,
+            background: 'var(--violet-dim)',
+            border: '1px solid var(--violet-border)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 0 40px var(--violet-glow)',
+            animation: 'pulseScale 2s ease-in-out infinite',
+          }}>
+            <svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+              <rect x="5" y="11" width="14" height="10" rx="3" fill="var(--violet-dim)" stroke="var(--violet-lt)" strokeWidth={1.5} />
+              <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="var(--violet-lt)" strokeWidth={1.5} strokeLinecap="round" />
+              <circle cx="12" cy="16" r="1.5" fill="var(--violet-lt)" />
+            </svg>
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-sub)', letterSpacing: '0.02em' }}>Loading your data…</div>
+        </div>
+      )}
+
       <div style={{ position: 'relative', zIndex: 1, minHeight: '100dvh' }}>
         <AnimatePresence>
           {showLockAnim && <LockAnimation onComplete={handleLockAnimComplete} />}
