@@ -236,7 +236,15 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
           </div>
           {notificationPermission !== 'granted' && notificationPermission !== 'denied' && (
             <button
-              onClick={handleNotificationRequest}
+              onClick={async () => {
+                try {
+                  const perm = await requestNotificationPermission();
+                  onStateChange({ ...state, notificationPermission: perm });
+                  if (perm === 'denied') alert("Notifications blocked by browser. Please enable them in site settings.");
+                } catch {
+                  alert("Notifications failed. Ensure you are using HTTPS or have added the app to your Home Screen.");
+                }
+              }}
               style={{
                 padding: '8px 14px', borderRadius: 10,
                 background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.28)',
@@ -248,7 +256,10 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
           )}
           {notificationPermission === 'granted' && (
             <button
-              onClick={() => sendTestNotification()}
+              onClick={async () => {
+                const ok = await sendTestNotification();
+                if (!ok) alert("The browser blocked the test notification. You may need to add the app to your Home Screen or check 'Do Not Disturb' settings.");
+              }}
               style={{
                 padding: '8px 14px', borderRadius: 10,
                 background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.28)',

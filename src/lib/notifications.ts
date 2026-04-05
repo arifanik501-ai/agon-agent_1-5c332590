@@ -167,12 +167,14 @@ export function startInAppAlarm(
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const dayNum = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-    if (dayNum < 1 || dayNum > 30) return;
+    if (dayNum > 30) return;
+    const isDemo = dayNum < 1;
+    const activeDay = isDemo ? 0 : dayNum;
 
     tasks.forEach((task, idx) => {
       const [h, m] = task.time.split(':').map(Number);
       const taskMinutes = h * 60 + m;
-      const phrase = MOTIVATIONAL_PHRASES[(dayNum - 1) % 30];
+      const phrase = isDemo ? "Demo Alarm Active!" : MOTIVATIONAL_PHRASES[(activeDay - 1) % 30];
       const dayKey = now.toDateString();
 
       // Pre-reminder: 5 minutes before task time
@@ -182,10 +184,10 @@ export function startInAppAlarm(
         if (Notification.permission === 'granted') {
           try {
             new Notification(`⏰ Coming up in 5 min: ${task.name}`, {
-              body: `Day ${dayNum}/30 · Get ready!`,
+              body: isDemo ? 'Demo Mode check' : `Day ${activeDay}/30 · Get ready!`,
               icon: '/icon-192.png',
               badge: '/icon-192.png',
-              tag: `lockin-pre-${task.id}-day-${dayNum}`,
+              tag: `lockin-pre-${task.id}-day-${activeDay}`,
               // @ts-ignore
               vibrate: [100, 50, 100],
               requireInteraction: false,
@@ -206,10 +208,10 @@ export function startInAppAlarm(
         if (Notification.permission === 'granted') {
           try {
             new Notification(`🔒 Task ${idx + 1}/${tasks.length}: ${task.name}`, {
-              body: `Day ${dayNum}/30 · ${phrase}`,
+              body: isDemo ? 'Demo alarm working!' : `Day ${activeDay}/30 · ${phrase}`,
               icon: '/icon-192.png',
               badge: '/icon-192.png',
-              tag: `lockin-${task.id}-day-${dayNum}`,
+              tag: `lockin-${task.id}-day-${activeDay}`,
               // @ts-ignore
               vibrate: [200, 100, 200, 100, 200],
               requireInteraction: true,
@@ -235,27 +237,31 @@ export function stopInAppAlarm(): void {
 
 export async function sendTestNotification(): Promise<boolean> {
   if (Notification.permission !== 'granted') return false;
-  try {
-    const reg = await navigator.serviceWorker.ready;
-    await reg.showNotification('🔒 LockIn — Test Notification', {
-      body: 'Push notifications are working! You\'ll be reminded at each task\'s scheduled time.',
-      icon: '/icon-192.png',
-      badge: '/icon-192.png',
-      tag: 'lockin-test',
-      // @ts-ignore
-      vibrate: [200, 100, 200],
-    });
-    return true;
-  } catch {
-    // Fallback to plain Notification
+  
+  if ('serviceWorker' in navigator) {
     try {
-      new Notification('🔒 LockIn — Test Notification', {
-        body: 'Push notifications are working!',
+      const reg = await Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('sw_timeout')), 1500))
+      ]) as ServiceWorkerRegistration;
+      
+      await reg.showNotification('🔒 LockIn — Test', {
+        body: 'Push notifications are working perfectly!',
         icon: '/icon-192.png',
+        badge: '/icon-192.png',
+        tag: 'lockin-test',
+        // @ts-ignore
+        vibrate: [200, 100, 200],
       });
       return true;
-    } catch {
-      return false;
-    }
+    } catch {}
+  }
+
+  // Fallback to desktop Notification API if SW hung or failed
+  try {
+    new Notification('🔒 LockIn', { body: 'Test works (Desktop Fallback)!' });
+    return true;
+  } catch {
+    return false;
   }
 }
