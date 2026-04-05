@@ -21,7 +21,7 @@ export default function CalendarStrip({ startDate, currentDay, tasks, records, o
     complete: 'var(--green)',
     partial:  'var(--amber)',
     missed:   'var(--red)',
-    future:   'rgba(255,255,255,0.08)',
+    future:   'var(--border)',
     today:    'var(--violet)',
   };
 
@@ -29,7 +29,7 @@ export default function CalendarStrip({ startDate, currentDay, tasks, records, o
     complete: 'rgba(16,185,129,0.10)',
     partial:  'rgba(245,158,11,0.08)',
     missed:   'rgba(239,68,68,0.08)',
-    future:   'rgba(255,255,255,0.03)',
+    future:   'var(--surface)',
     today:    'rgba(124,58,237,0.12)',
   };
 

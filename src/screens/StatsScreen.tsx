@@ -172,10 +172,10 @@ export default function StatsScreen({ state }: Props) {
             style={{ marginBottom: 12 }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-              <span style={{ fontSize: 13, color: 'rgba(240,240,248,0.8)', fontWeight: 500, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 500, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {i + 1}. {ts.task.name}
               </span>
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#9B59F5', marginLeft: 8, flexShrink: 0 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--violet-lt)', marginLeft: 8, flexShrink: 0 }}>
                 {ts.rate}%
               </span>
             </div>
@@ -276,7 +276,7 @@ export default function StatsScreen({ state }: Props) {
                 key={v}
                 x1={0} y1={graphH - (v / 10) * graphH}
                 x2={graphW} y2={graphH - (v / 10) * graphH}
-                stroke="rgba(255,255,255,0.05)" strokeWidth={1}
+                stroke="var(--border)" strokeWidth={1}
               />
             ))}
             {/* Y labels */}

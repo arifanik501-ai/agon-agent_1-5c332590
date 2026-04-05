@@ -100,7 +100,7 @@ export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync
             onClick={onLogout} 
             style={{ 
               width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--surface)', border: '1px solid var(--border)',
               color: 'var(--text-sub)', display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', transition: 'all 0.2s', marginTop: 4
             }}

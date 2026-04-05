@@ -53,11 +53,11 @@ export default function ProgressRing({ progress, size = 180, strokeWidth = 10, l
         position: 'absolute',
         inset: strokeWidth * 1.5,
         borderRadius: '50%',
-        background: 'rgba(255,255,255,0.03)',
+        background: 'var(--surface)',
         backdropFilter: 'blur(20px) saturate(150%)',
         WebkitBackdropFilter: 'blur(20px) saturate(150%)',
-        border: '1px solid rgba(255,255,255,0.06)',
-        boxShadow: 'inset 0 2px 6px rgba(255,255,255,0.04), inset 0 -2px 4px rgba(0,0,0,0.1), 0 0 40px rgba(124,58,237,0.06)',
+        border: '1px solid var(--border)',
+        boxShadow: 'var(--glass-inner-shadow), 0 0 40px rgba(124,58,237,0.06)',
       }} />
 
       <svg
@@ -82,7 +82,7 @@ export default function ProgressRing({ progress, size = 180, strokeWidth = 10, l
         <circle
           cx={cx} cy={cy} r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.05)"
+          stroke="var(--border)"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
         />
@@ -148,7 +148,7 @@ export default function ProgressRing({ progress, size = 180, strokeWidth = 10, l
           </span>
         )}
         {sublabel && (
-          <span style={{ fontSize: 12, color: 'rgba(240,240,250,0.5)', fontWeight: 500, letterSpacing: '0.03em' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-dim)', fontWeight: 500, letterSpacing: '0.03em' }}>
             {sublabel}
           </span>
         )}

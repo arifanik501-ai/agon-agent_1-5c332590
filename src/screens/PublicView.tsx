@@ -282,14 +282,14 @@ export default function PublicView({ onLogin }: { onLogin: () => void }) {
                     >
                       {done && <svg width={14} height={14} viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="white" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>}
                       {missed && !done && <svg width={12} height={12} viewBox="0 0 14 14" fill="none"><path d="M3 3L11 11M11 3L3 11" stroke="#EF4444" strokeWidth={2.2} strokeLinecap="round" /></svg>}
-                      {!done && !missed && <span style={{ fontSize: 10, fontWeight: 700, color: 'rgba(240,240,248,0.28)' }}>{i + 1}</span>}
+                      {!done && !missed && <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-faint)' }}>{i + 1}</span>}
                     </motion.div>
 
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 15, fontWeight: 600, color: done ? 'rgba(240,240,248,0.5)' : 'var(--text)', textDecoration: done ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {task.name}
                       </div>
-                      <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.36)', marginTop: 2 }}>
+                      <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
                         {formatTime12(task.time)}{task.description && ` · ${task.description}`}
                       </div>
                     </div>

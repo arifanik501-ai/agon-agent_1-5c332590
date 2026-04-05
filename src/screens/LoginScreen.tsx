@@ -147,7 +147,7 @@ export default function LoginScreen({ onAuthenticated }: Props) {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     background: hasDot
                       ? (status==='error' ? 'rgba(239,68,68,0.08)' : status==='success' ? 'rgba(16,185,129,0.08)' : 'rgba(124,58,237,0.10)')
-                      : 'rgba(255,255,255,0.03)',
+                      : 'var(--surface)',
                     backdropFilter: 'blur(20px)',
                     WebkitBackdropFilter: 'blur(20px)',
                     border: `1.5px solid ${hasDot ? (status==='error' ? 'var(--red-border)' : status==='success' ? 'var(--green-border)' : 'rgba(124,58,237,0.45)') : 'var(--border)'}`,
@@ -197,16 +197,16 @@ export default function LoginScreen({ onAuthenticated }: Props) {
                 aria-label={isBack ? 'Delete' : isEmpty ? undefined : key}
                 style={{
                   height: 56, borderRadius: 16,
-                  background: isEmpty ? 'transparent' : 'rgba(255,255,255,0.05)',
+                  background: isEmpty ? 'transparent' : 'var(--surface)',
                   backdropFilter: isEmpty ? undefined : 'blur(16px)',
                   WebkitBackdropFilter: isEmpty ? undefined : 'blur(16px)',
-                  border: isEmpty ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                  border: isEmpty ? 'none' : '1px solid var(--border)',
                   color: isBack ? 'var(--text-sub)' : 'var(--text)',
                   fontSize: 20, fontWeight: isBack ? 400 : 600,
                   fontFamily: 'Inter, sans-serif',
                   cursor: isEmpty ? 'default' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: isEmpty ? 'none' : 'inset 0 1px 1px rgba(255,255,255,0.06)',
+                  boxShadow: isEmpty ? 'none' : 'var(--glass-inner-shadow)',
                   transition: 'background 0.15s ease',
                   WebkitTapHighlightColor: 'transparent',
                 }}

@@ -101,7 +101,7 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
     backdropFilter: 'blur(20px) saturate(160%)',
     WebkitBackdropFilter: 'blur(20px) saturate(160%)',
     border: `1px solid ${borderAlpha}`,
-    boxShadow: `inset 0 1px 2px rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.12)`,
+    boxShadow: `var(--glass-inner-shadow), 0 4px 16px rgba(0,0,0,0.12)`,
     position: 'relative' as const, overflow: 'hidden' as const,
   });
 
@@ -125,14 +125,14 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
             aria-label="Refresh data from cloud"
             style={{
               width: 42, height: 42, borderRadius: 14,
-              background: refreshDone ? 'rgba(16,185,129,0.10)' : refreshing ? 'rgba(124,58,237,0.10)' : 'rgba(255,255,255,0.05)',
+              background: refreshDone ? 'rgba(16,185,129,0.10)' : refreshing ? 'rgba(124,58,237,0.10)' : 'var(--surface)',
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
-              border: `1px solid ${refreshDone ? 'rgba(16,185,129,0.25)' : refreshing ? 'rgba(124,58,237,0.25)' : 'rgba(255,255,255,0.08)'}`,
+              border: `1px solid ${refreshDone ? 'rgba(16,185,129,0.25)' : refreshing ? 'rgba(124,58,237,0.25)' : 'var(--border)'}`,
               color: refreshDone ? 'var(--green)' : refreshing ? 'var(--violet-lt)' : 'var(--text-dim)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: refreshing ? 'not-allowed' : 'pointer',
-              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)',
+              boxShadow: 'var(--glass-inner-shadow)',
               transition: 'all 0.3s ease',
             }}
           >
@@ -146,14 +146,14 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
             onClick={onUnlock}
             style={{
               width: 42, height: 42, borderRadius: 14,
-              background: 'rgba(255,255,255,0.05)',
+              background: 'var(--surface)',
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid var(--border)',
               color: 'var(--text-dim)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer',
-              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)',
+              boxShadow: 'var(--glass-inner-shadow)',
             }}
             aria-label="Settings"
           >
