@@ -117,48 +117,51 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
             {isDemo ? <span style={{ color: 'var(--amber)' }}>Demo Mode</span> : <>Day <span style={{ color: 'var(--violet-lt)' }}>{currentDay}</span> of 30</>}
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 10 }}>
           {/* Refresh */}
           <motion.button
-            whileTap={{ scale: 0.88 }}
+            whileHover={!refreshing && !refreshDone ? { scale: 1.1, background: 'var(--surface-hi)', borderColor: 'var(--border-hi)', boxShadow: '0 8px 20px var(--violet-glow), var(--glass-inner-shadow)', color: 'var(--text)' } : undefined}
+            whileTap={!refreshing ? { scale: 0.9, rotate: 180 } : undefined}
             onClick={handleRefresh}
             disabled={refreshing}
             aria-label="Refresh data from cloud"
             style={{
-              width: 42, height: 42, borderRadius: 14,
-              background: refreshDone ? 'rgba(16,185,129,0.10)' : refreshing ? 'rgba(124,58,237,0.10)' : 'var(--surface)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: `1px solid ${refreshDone ? 'rgba(16,185,129,0.25)' : refreshing ? 'rgba(124,58,237,0.25)' : 'var(--border)'}`,
-              color: refreshDone ? 'var(--green)' : refreshing ? 'var(--violet-lt)' : 'var(--text-dim)',
+              width: 44, height: 44, borderRadius: 16,
+              background: refreshDone ? 'rgba(16,185,129,0.10)' : refreshing ? 'rgba(124,58,237,0.10)' : 'var(--surface-glass)',
+              backdropFilter: 'blur(20px) saturate(150%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+              border: `1px solid ${refreshDone ? 'rgba(16,185,129,0.25)' : refreshing ? 'rgba(124,58,237,0.25)' : 'var(--border-glass)'}`,
+              color: refreshDone ? 'var(--green)' : refreshing ? 'var(--violet-lt)' : 'var(--text-sub)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: refreshing ? 'not-allowed' : 'pointer',
               boxShadow: 'var(--glass-inner-shadow)',
-              transition: 'all 0.3s ease',
+              transition: 'all 0.3s cubic-bezier(0.22,1,0.36,1)',
             }}
           >
-            <span style={{ display: 'flex', animation: refreshing ? 'spinOnce 0.8s linear infinite' : undefined }}>
-              <RefreshCw size={16} />
-            </span>
+            <motion.span animate={{ rotate: refreshing ? 360 : 0 }} transition={{ repeat: refreshing ? Infinity : 0, duration: 1, ease: 'linear' }} style={{ display: 'flex' }}>
+              <RefreshCw size={17} strokeWidth={2.5} />
+            </motion.span>
           </motion.button>
           {/* Settings */}
           <motion.button
-            whileTap={{ scale: 0.88, rotate: 30 }}
+            whileHover={{ scale: 1.1, background: 'var(--surface-hi)', borderColor: 'var(--border-hi)', boxShadow: '0 8px 20px var(--violet-glow), var(--glass-inner-shadow)', color: 'var(--text)', rotate: 45 }}
+            whileTap={{ scale: 0.9, rotate: -45 }}
             onClick={onUnlock}
             style={{
-              width: 42, height: 42, borderRadius: 14,
-              background: 'var(--surface)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid var(--border)',
-              color: 'var(--text-dim)',
+              width: 44, height: 44, borderRadius: 16,
+              background: 'var(--surface-glass)',
+              backdropFilter: 'blur(20px) saturate(150%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+              border: '1px solid var(--border-glass)',
+              color: 'var(--text-sub)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer',
               boxShadow: 'var(--glass-inner-shadow)',
+              transition: 'background 0.3s, border-color 0.3s, color 0.3s',
             }}
             aria-label="Settings"
           >
-            <SlidersHorizontal size={17} />
+            <SlidersHorizontal size={18} strokeWidth={2.5} />
           </motion.button>
         </div>
       </motion.div>
@@ -178,19 +181,28 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
               <>Day <span className="gradient-text">{currentDay}</span><span style={{ fontSize: 20, color: 'var(--text-faint)', fontWeight: 500 }}>/30</span></>
             )}
           </div>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            marginTop: 8, padding: '6px 16px',
-            borderRadius: 20,
-            background: 'var(--surface)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid var(--border)',
-            boxShadow: 'var(--glass-inner-shadow)',
-          }}>
-            <span style={{ fontSize: 13 }}>📅</span>
-            <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-sub)', letterSpacing: '0.01em' }}>{dateStr}</span>
-          </div>
+          <motion.div
+            animate={{ y: [0, -8, 0], scale: [1, 1.04, 1], boxShadow: ['var(--glass-inner-shadow), 0 4px 12px rgba(0,0,0,0.1)', 'var(--glass-inner-shadow), 0 12px 32px rgba(124,58,237,0.4)', 'var(--glass-inner-shadow), 0 4px 12px rgba(0,0,0,0.1)'] }}
+            transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              marginTop: 12, padding: '8px 20px',
+              borderRadius: 24,
+              background: 'var(--surface-hi)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              border: '1px solid var(--violet-border)',
+            }}
+          >
+            <motion.span 
+              animate={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1] }} 
+              transition={{ repeat: Infinity, duration: 2.5, ease: 'backInOut' }}
+              style={{ fontSize: 16, display: 'inline-block', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}
+            >
+              📅
+            </motion.span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', letterSpacing: '0.02em', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>{dateStr}</span>
+          </motion.div>
           <div style={{ fontSize: 12, color: 'var(--violet-lt)', marginTop: 6, fontStyle: 'italic', opacity: 0.85 }}>"{phrase}"</div>
         </div>
 

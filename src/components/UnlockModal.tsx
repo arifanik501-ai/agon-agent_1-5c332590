@@ -44,9 +44,12 @@ export default function UnlockModal({ onUnlock, onClose }: Props) {
       onClick={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal aria-label="Unlock app">
       <div className={shake ? 'shake' : ''}
         style={{ width: '100%', maxWidth: 340, background: 'var(--modal-bg)', borderRadius: 24, border: '1px solid var(--border)', padding: '32px 24px', textAlign: 'center', boxShadow: '0 0 60px rgba(0,0,0,0.2)', animation: 'staggerIn 0.35s cubic-bezier(0.22,1,0.36,1) forwards' }}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-          <button onClick={onClose} style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><X size={14} /></button>
-        </div>
+        {!lockedOut && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+            <button onClick={onClose} style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><X size={14} /></button>
+          </div>
+        )}
+        {lockedOut && <div style={{ marginBottom: 16 }} />}
         <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'var(--violet-dim)', border: '2px solid rgba(124,58,237,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', boxShadow: '0 0 20px var(--violet-dim)' }}>
           <Lock size={28} color="var(--violet-lt)" />
         </div>

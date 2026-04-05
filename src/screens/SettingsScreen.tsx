@@ -42,36 +42,43 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
     overflow: 'hidden' as const,
   };
 
+  const springTransition = { type: 'spring' as const, damping: 20, stiffness: 300 };
+
   return (
     <div style={{ padding: '0 20px 100px', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 20px)' }}>
 
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, scale: 0.9, y: -20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={springTransition}
         style={{ marginBottom: 28 }}
       >
-        <button
+        <motion.button
           onClick={onBack}
+          whileHover={{ scale: 1.04, background: 'var(--surface-hi)', borderColor: 'var(--border-hi)', boxShadow: '0 8px 24px var(--violet-glow), var(--glass-inner-shadow)' }}
+          whileTap={{ scale: 0.92 }}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 4,
-            padding: '6px 12px 6px 6px',
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 12,
-            color: 'var(--text-sub)',
+            padding: '8px 14px 8px 8px',
+            background: 'var(--surface-glass)',
+            backdropFilter: 'blur(20px) saturate(150%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+            border: '1px solid var(--border-glass)',
+            borderRadius: 16,
+            color: 'var(--text)',
             fontSize: 13,
-            fontWeight: 600,
+            fontWeight: 700,
             cursor: 'pointer',
             marginBottom: 16,
-            transition: 'all 0.2s',
+            boxShadow: 'var(--glass-inner-shadow)',
+            transition: 'background 0.25s ease, border-color 0.25s ease',
           }}
         >
           <ChevronLeft size={16} /> Dashboard
-        </button>
+        </motion.button>
         <div style={{ fontSize: 11, color: 'var(--text-sub)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4, fontWeight: 600 }}>
           Settings
         </div>
@@ -82,9 +89,11 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
 
       {/* ── Manual Sync / Refresh ── */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.03, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ ...springTransition, delay: 0.05 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         style={{
           ...card,
           background: syncState === 'done'
@@ -171,9 +180,11 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
 
       {/* ── Goal Start Date ── */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ ...springTransition, delay: 0.1 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         style={card}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
@@ -372,9 +383,11 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
 
       {/* ── Lock status ── */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ ...springTransition, delay: 0.15 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         style={card}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -411,9 +424,11 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
       
       {/* ── Notifications ── */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.13, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ ...springTransition, delay: 0.2 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         style={card}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -487,9 +502,11 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
       </motion.div>
       {/* ── 120Hz Liquid Mode ── */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ ...springTransition, delay: 0.25 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         style={card}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -533,9 +550,11 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
 
       {/* ── Theme Mode ── */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.19, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ ...springTransition, delay: 0.3 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         style={card}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -558,7 +577,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
               Theme
             </div>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
-              {state.lightMode ? 'Light Mode — Daylight' : 'Dark Mode — Deep Space'}
+              {state.lightMode ? 'Light Mode — Daylight' : 'Dark Mode — Deep Sea'}
             </div>
           </div>
           <ThemeSwitch
@@ -571,17 +590,19 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
       {/* ── Task list ── */}
       {tasks.length > 0 && (
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ ...springTransition, delay: 0.35 }}
           style={{ marginBottom: 12 }}
         >
           <div style={{ fontSize: 11, color: 'var(--text-sub)', marginBottom: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             {locked ? 'Locked Tasks' : 'Your Tasks'} ({tasks.length})
           </div>
           {tasks.map((task, i) => (
-            <div
+            <motion.div
               key={task.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               style={{
                 ...card,
                 padding: '12px 16px',
@@ -604,16 +625,18 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                 <div style={{ fontSize: 11, color: 'var(--text-sub)' }}>{formatTime12(task.time)}</div>
               </div>
               {locked && <Lock size={13} color="rgba(240,240,248,0.2)" />}
-            </div>
+            </motion.div>
           ))}
         </motion.div>
       )}
 
       {/* ── About ── */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ ...springTransition, delay: 0.35 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         style={card}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -626,7 +649,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
           </div>
           <div>
             <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>30 Days Goal</div>
-            <div style={{ fontSize: 12, color: 'var(--text-sub)', marginTop: 2 }}>30-Day Habit Commitment · v2.0</div>
+            <div style={{ fontSize: 12, color: 'var(--text-sub)', marginTop: 2 }}>30-Day Habit Commitment · v3.0</div>
           </div>
         </div>
       </motion.div>

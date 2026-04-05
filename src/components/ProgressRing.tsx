@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 
 interface Props {
   progress: number; // 0-100
@@ -46,19 +47,33 @@ export default function ProgressRing({ progress, size = 180, strokeWidth = 10, l
   const py = cy + radius * Math.sin(rad);
 
   return (
-    <div style={{ width: size, height: size, position: 'relative' }} role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label={`Overall progress: ${Math.round(progress)}%`}>
+    <motion.div 
+      animate={{ y: [0, -10, 0] }}
+      transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+      style={{ width: size, height: size, position: 'relative' }} 
+      role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label={`Overall progress: ${Math.round(progress)}%`}
+    >
       
       {/* Glass disc background */}
-      <div style={{
-        position: 'absolute',
-        inset: strokeWidth * 1.5,
-        borderRadius: '50%',
-        background: 'var(--surface)',
-        backdropFilter: 'blur(20px) saturate(150%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(150%)',
-        border: '1px solid var(--border)',
-        boxShadow: 'var(--glass-inner-shadow), 0 0 40px rgba(124,58,237,0.06)',
-      }} />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.02, 1],
+          boxShadow: [
+            'var(--glass-inner-shadow), 0 0 30px rgba(124,58,237,0.08)',
+            'var(--glass-inner-shadow), 0 10px 50px rgba(124,58,237,0.25)',
+            'var(--glass-inner-shadow), 0 0 30px rgba(124,58,237,0.08)'
+          ]
+        }}
+        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+        style={{
+          position: 'absolute',
+          inset: strokeWidth * 1.5,
+          borderRadius: '50%',
+          background: 'var(--surface)',
+          backdropFilter: 'blur(20px) saturate(150%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+          border: '1px solid var(--border)',
+        }} />
 
       <svg
         width={size}
@@ -153,6 +168,6 @@ export default function ProgressRing({ progress, size = 180, strokeWidth = 10, l
           </span>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

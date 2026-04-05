@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Lock, Clock, Cloud, CloudCheck, RotateCw, AlertCircle, ChevronLeft } from 'lucide-react';
 import type { Task } from '../lib/store';
 import { pushToCloud, loadState } from '../lib/store';
+import LiquidTimePicker from '../components/LiquidTimePicker';
 
 interface Props {
   tasks: Task[];
@@ -20,6 +21,7 @@ export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync
   const [form, setForm] = useState<TaskForm>(emptyForm());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(true);
+  const [showTimePicker, setShowTimePicker] = useState(false);
   const [errors, setErrors] = useState<Partial<TaskForm>>({});
   const [syncState, setSyncState] = useState<'idle' | 'syncing' | 'done' | 'error'>('idle');
   const formRef = useRef<HTMLDivElement>(null);
@@ -78,8 +80,6 @@ export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync
     finally { setTimeout(() => setSyncState('idle'), 4000); }
   }
 
-  const hours   = Array.from({ length: 12 }, (_, i) => String(i+1).padStart(2,'0'));
-  const minutes = ['00','05','10','15','20','25','30','35','40','45','50','55'];
 
   const syncBg = syncState === 'done' ? 'var(--green-dim)' : syncState === 'error' ? 'var(--red-dim)' : 'var(--violet-dim)';
   const syncBorder = syncState === 'done' ? 'var(--green-border)' : syncState === 'error' ? 'var(--red-border)' : syncState === 'syncing' ? 'rgba(124,58,237,0.45)' : 'rgba(124,58,237,0.2)';
@@ -181,13 +181,19 @@ export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync
 
             <div style={{ marginBottom: 14 }}>
               <label style={{ fontSize: 12, color: 'var(--text-sub)', display: 'block', marginBottom: 6, fontWeight: 600 }}>Scheduled Time</label>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <select value={form.hour} onChange={e => setForm(f => ({ ...f, hour: e.target.value }))} className="liquid-select" style={{ flex: 1 }}>{hours.map(h => <option key={h} value={h}>{h}</option>)}</select>
-                <div style={{ display: 'flex', alignItems: 'center', color: 'var(--text-dim)', fontWeight: 700, fontSize: 18 }}>:</div>
-                <select value={form.minute} onChange={e => setForm(f => ({ ...f, minute: e.target.value }))} className="liquid-select" style={{ flex: 1 }}>{minutes.map(m => <option key={m} value={m}>{m}</option>)}</select>
-                <select value={form.period} onChange={e => setForm(f => ({ ...f, period: e.target.value as 'AM'|'PM' }))} className="liquid-select">
-                  <option value="AM">AM</option><option value="PM">PM</option>
-                </select>
+              <div 
+                onClick={() => setShowTimePicker(true)}
+                style={{ 
+                  display: 'flex', gap: 12, padding: '12px 16px', borderRadius: 16,
+                  background: 'var(--surface-hi)', border: '1px solid var(--border)',
+                  cursor: 'pointer', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1)'
+                }}
+              >
+                <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--violet-lt)', width: 44, textAlign: 'center' }}>{form.hour}</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-dim)' }}>:</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--violet-lt)', width: 44, textAlign: 'center' }}>{form.minute}</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-sub)', background: 'var(--surface)', padding: '6px 12px', borderRadius: 10, marginLeft: 8, border: '1px solid var(--border)' }}>{form.period}</div>
               </div>
             </div>
 
@@ -257,6 +263,19 @@ export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync
       {tasks.length === 0 && !showAddForm && (
         <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-faint)', fontSize: 14 }}>Tap "Add another task" to get started</div>
       )}
+
+      {/* Time Picker Modal */}
+      <AnimatePresence>
+        {showTimePicker && (
+          <LiquidTimePicker
+            initialHour={form.hour}
+            initialMinute={form.minute}
+            initialPeriod={form.period}
+            onSave={(h, m, p) => { setForm(f => ({ ...f, hour: h, minute: m, period: p })); setShowTimePicker(false); }}
+            onClose={() => setShowTimePicker(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

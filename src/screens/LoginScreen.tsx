@@ -55,22 +55,22 @@ export default function LoginScreen({ onAuthenticated }: Props) {
     }}>
 
       <motion.div
-        initial={{ opacity: 0, y: 36, scale: 0.95 }}
+        initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.22,1,0.36,1] }}
+        transition={{ type: 'spring', damping: 22, stiffness: 280 }}
         className={shake ? 'shake' : ''}
         style={{
           width: '100%', maxWidth: 360,
-          background: 'var(--modal-bg)',
-          backdropFilter: 'blur(48px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(48px) saturate(180%)',
-          borderRadius: 28,
+          background: 'var(--surface-glass)',
+          backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-saturate))',
+          WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-saturate))',
+          borderRadius: 32,
           border: `1px solid ${status === 'error' ? 'var(--red-border)' : status === 'success' ? 'var(--green-border)' : 'var(--border-glass)'}`,
-          padding: '40px 28px 32px',
+          padding: '44px 28px 36px',
           position: 'relative', overflow: 'hidden',
           boxShadow: status === 'success'
-            ? '0 0 60px rgba(16,185,129,0.12), inset 0 1px 2px rgba(255,255,255,0.1), 0 16px 48px rgba(0,0,0,0.3)'
-            : 'inset 0 1px 2px rgba(255,255,255,0.08), inset 0 -1px 1px rgba(0,0,0,0.1), 0 16px 48px rgba(0,0,0,0.3)',
+            ? '0 0 60px rgba(16,185,129,0.18), var(--glass-inner-shadow), 0 20px 60px rgba(0,0,0,0.4)'
+            : 'var(--glass-inner-shadow), 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(124,58,237,0.06)',
           transition: 'border-color 0.35s ease, box-shadow 0.35s ease',
         }}
       >
@@ -118,13 +118,13 @@ export default function LoginScreen({ onAuthenticated }: Props) {
         </motion.div>
 
         {/* Heading */}
-        <motion.div initial={{ opacity:0,y:10 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.45,delay:0.18,ease:[0.22,1,0.36,1] }} style={{ textAlign: 'center', marginBottom: 30, position: 'relative', zIndex: 1 }}>
-          <h1 style={{ fontSize: 23, fontWeight: 800, color: 'var(--text)', margin: '0 0 7px', letterSpacing: '-0.02em' }}>
-            {status === 'success' ? 'Access Granted' : 'Enter Access Code'}
+        <motion.div initial={{ opacity:0,y:10 }} animate={{ opacity:1,y:0 }} transition={{ type:'spring', damping:20, stiffness:300, delay:0.1 }} style={{ textAlign: 'center', marginBottom: 32, position: 'relative', zIndex: 1 }}>
+          <h1 style={{ fontSize: 25, fontWeight: 900, color: 'var(--text)', margin: '0 0 8px', letterSpacing: '-0.02em' }}>
+            {status === 'success' ? <span className="gradient-text">Access Granted</span> : 'Enter Access Code'}
           </h1>
           <AnimatePresence mode="wait">
             <motion.p key={status === 'error' ? 'err' : attempts > 0 ? 'retry' : 'default'}
-              initial={{ opacity:0,y:4 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0,y:-4 }} transition={{ duration:0.2 }}
+              initial={{ opacity:0,y:6 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0,y:-6 }} transition={{ duration:0.25, type:'spring', bounce:0 }}
               style={{ fontSize: 13, color: status === 'error' ? 'var(--red)' : 'var(--text-sub)', margin: 0, lineHeight: 1.5 }}>
               {status === 'error' ? `Incorrect code${attempts > 1 ? ` · ${attempts} attempts` : ''}` : status === 'success' ? 'Welcome back…' : attempts > 0 ? 'Try again' : '4-digit code required'}
             </motion.p>
@@ -174,18 +174,18 @@ export default function LoginScreen({ onAuthenticated }: Props) {
         </motion.div>
 
         {/* Progress bar */}
-        <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.3,duration:0.4 }}
-          style={{ marginBottom: 28, height: 3, borderRadius: 3, background: 'var(--border)', overflow: 'hidden', position: 'relative', zIndex: 1 }}>
-          <motion.div animate={{ width: `${(filled/4)*100}%` }} transition={{ duration:0.25,ease:[0.22,1,0.36,1] }}
-            style={{ height:'100%', borderRadius:3,
-              background: status==='error' ? 'var(--red)' : status==='success' ? 'var(--green)' : `linear-gradient(90deg,#4F46E5,var(--violet-lt))`,
-              boxShadow: `0 0 12px ${status==='error'?'var(--red-dim)':status==='success'?'var(--green-dim)':'var(--violet-dim)'}`,
+        <motion.div initial={{ opacity:0, scaleX:0 }} animate={{ opacity:1, scaleX:1 }} transition={{ delay:0.2, duration:0.4 }}
+          style={{ marginBottom: 32, height: 4, borderRadius: 4, background: 'rgba(255,255,255,0.04)', overflow: 'hidden', position: 'relative', zIndex: 1, boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)' }}>
+          <motion.div animate={{ width: `${(filled/4)*100}%` }} transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+            style={{ height:'100%', borderRadius:4,
+              background: status==='error' ? 'var(--red)' : status==='success' ? 'var(--green)' : `linear-gradient(90deg,var(--violet),var(--violet-bright))`,
+              boxShadow: `0 0 16px ${status==='error'?'var(--red)':status==='success'?'var(--green)':'var(--violet-bright)'}`,
               transition: 'background 0.3s ease' }} />
         </motion.div>
 
         {/* Numpad — frosted glass buttons */}
-        <motion.div initial={{ opacity:0,y:12 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.45,delay:0.3,ease:[0.22,1,0.36,1] }}
-          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, position: 'relative', zIndex: 1 }}>
+        <motion.div initial={{ opacity:0,y:14 }} animate={{ opacity:1,y:0 }} transition={{ type:'spring', damping:22, stiffness:280, delay:0.2 }}
+          style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, position: 'relative', zIndex: 1 }}>
           {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((key, idx) => {
             const isEmpty = key === ''; const isBack = key === '⌫';
             return (
@@ -193,21 +193,22 @@ export default function LoginScreen({ onAuthenticated }: Props) {
                 key={idx}
                 onClick={() => !isEmpty && handleNumpad(key)}
                 disabled={isEmpty || status==='success'}
-                whileTap={!isEmpty ? { scale: 0.9 } : undefined}
+                whileHover={!isEmpty ? { scale: 1.05, y: -2, background: 'var(--surface-hi)', borderColor: 'var(--border-hi)', boxShadow: '0 8px 20px var(--violet-glow), var(--glass-inner-shadow)' } : undefined}
+                whileTap={!isEmpty ? { scale: 0.92, y: 1 } : undefined}
                 aria-label={isBack ? 'Delete' : isEmpty ? undefined : key}
                 style={{
-                  height: 56, borderRadius: 16,
+                  height: 60, borderRadius: 20,
                   background: isEmpty ? 'transparent' : 'var(--surface)',
-                  backdropFilter: isEmpty ? undefined : 'blur(16px)',
-                  WebkitBackdropFilter: isEmpty ? undefined : 'blur(16px)',
-                  border: isEmpty ? 'none' : '1px solid var(--border)',
+                  backdropFilter: isEmpty ? undefined : 'blur(20px)',
+                  WebkitBackdropFilter: isEmpty ? undefined : 'blur(20px)',
+                  border: isEmpty ? 'none' : '1.5px solid var(--border)',
                   color: isBack ? 'var(--text-sub)' : 'var(--text)',
-                  fontSize: 20, fontWeight: isBack ? 400 : 600,
+                  fontSize: 22, fontWeight: isBack ? 400 : 700,
                   fontFamily: 'Inter, sans-serif',
                   cursor: isEmpty ? 'default' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: isEmpty ? 'none' : 'var(--glass-inner-shadow)',
-                  transition: 'background 0.15s ease',
+                  transition: 'background 0.25s ease, border-color 0.25s ease',
                   WebkitTapHighlightColor: 'transparent',
                 }}
               >
