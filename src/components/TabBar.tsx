@@ -64,8 +64,8 @@ export default function TabBar({ active, onChange }: Props) {
             width: TAB_WIDTH - 4,
             height: `calc(100% - ${PAD * 2}px)`,
             borderRadius: 22,
-            background: 'rgba(124,58,237,0.16)',
-            border: '1px solid rgba(124,58,237,0.30)',
+            background: 'var(--violet-dim)',
+            border: '1px solid var(--violet-border)',
             transformOrigin: 'center center',
             pointerEvents: 'none',
             zIndex: 0,
@@ -134,7 +134,7 @@ export default function TabBar({ active, onChange }: Props) {
                 }}
                 transition={{ type: 'spring', stiffness: 450, damping: 22, mass: 0.6 }}
                 style={{
-                  color: isActive ? '#C4B5FD' : 'var(--text-faint)',
+                  color: isActive ? 'var(--violet-lt)' : 'var(--text-dim)',
                   filter: isActive ? 'drop-shadow(0 0 10px rgba(167,139,250,0.6))' : undefined,
                   transition: 'color 0.3s ease, filter 0.3s ease',
                 }}>
@@ -142,13 +142,13 @@ export default function TabBar({ active, onChange }: Props) {
               </motion.div>
               <motion.span
                 animate={{
-                  opacity: isActive ? 1 : 0.4,
+                  opacity: isActive ? 1 : 0.7,
                   y: isActive ? 0 : 1,
                 }}
                 transition={{ duration: 0.3 }}
                 style={{
                   fontSize: 10, fontWeight: isActive ? 700 : 500,
-                  color: isActive ? '#C4B5FD' : 'var(--text-faint)',
+                  color: isActive ? 'var(--violet-lt)' : 'var(--text-dim)',
                   letterSpacing: '0.02em',
                   transition: 'color 0.3s ease',
                 }}>
