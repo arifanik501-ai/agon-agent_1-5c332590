@@ -6,7 +6,7 @@ import {
   onSyncStatusChange, DEFAULT_STATE,
 } from './lib/store';
 import type { AppState, Task, SyncStatus } from './lib/store';
-import { registerServiceWorker, requestNotificationPermission, startInAppAlarm, stopInAppAlarm } from './lib/notifications';
+import { registerServiceWorker, requestNotificationPermission, startInAppAlarm, stopInAppAlarm, scheduleLocalAlarms } from './lib/notifications';
 import LoginScreen from './screens/LoginScreen';
 
 import AmbientBackground from './components/AmbientBackground';
@@ -154,13 +154,17 @@ export default function App() {
 
   // In-app alarm
   useEffect(() => {
-    if (state.locked && state.startDate) {
+    if (state.locked && state.startDate && state.pushEnabled) {
       startInAppAlarm(state.tasks, state.startDate, (task, dayNum) => {
         setAlarm({ task, taskIndex: stateRef.current.tasks.indexOf(task), dayNum });
       });
+      scheduleLocalAlarms(state.tasks, state.startDate);
+    } else {
+      stopInAppAlarm();
+      scheduleLocalAlarms([], '');
     }
     return () => stopInAppAlarm();
-  }, [state.locked, state.startDate, state.tasks]);
+  }, [state.locked, state.startDate, state.tasks, state.pushEnabled]);
 
   const updateState = useCallback((newState: AppState) => {
     setState(newState);

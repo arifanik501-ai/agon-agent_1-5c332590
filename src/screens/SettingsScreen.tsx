@@ -208,8 +208,6 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             </button>
           )}
         </div>
-      </motion.div>
-
       {/* ── Notifications ── */}
       <motion.div
         initial={{ opacity: 0, y: 14 }}
@@ -220,58 +218,71 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <div style={{
             width: 44, height: 44, borderRadius: 12,
-            background: notificationPermission === 'granted' ? 'rgba(16,185,129,0.12)' : 'rgba(245,158,11,0.12)',
-            border: `1px solid ${notificationPermission === 'granted' ? 'rgba(16,185,129,0.28)' : 'rgba(245,158,11,0.28)'}`,
+            background: state.pushEnabled ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.05)',
+            border: `1px solid ${state.pushEnabled ? 'rgba(16,185,129,0.28)' : 'rgba(255,255,255,0.1)'}`,
+            boxShadow: state.pushEnabled ? '0 0 16px rgba(16,185,129,0.15)' : 'none',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'all 0.3s ease',
           }}>
-            <Bell size={20} color={notificationPermission === 'granted' ? '#10B981' : '#F59E0B'} />
+            <Bell size={20} color={state.pushEnabled ? '#10B981' : '#6B7280'} strokeWidth={state.pushEnabled ? 2.5 : 2} />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F0F8' }}>Push Notifications</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: state.pushEnabled ? '#34D399' : '#F0F0F8', transition: 'color 0.3s ease', display: 'flex', alignItems: 'center' }}>
+              Push Notifications
+              {state.pushEnabled && (
+                <span onClick={async (e) => { e.stopPropagation(); await sendTestNotification(); }} 
+                      style={{ marginLeft: 8, fontSize: 10, background: 'rgba(16,185,129,0.15)', color: '#10B981', padding: '2px 7px', borderRadius: 8, cursor: 'pointer', border: '1px solid rgba(16,185,129,0.25)', letterSpacing: '0.04em' }}>
+                  TEST
+                </span>
+              )}
+            </div>
             <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.45)', marginTop: 2 }}>
-              {notificationPermission === 'granted' ? 'Enabled — reminders active'
-                : notificationPermission === 'denied' ? 'Denied in browser settings'
-                : 'Not yet enabled'}
+              {state.pushEnabled ? 'Enabled — reminders active' : notificationPermission === 'denied' ? 'Denied in device browser settings' : 'Background reminders disabled'}
             </div>
           </div>
-          {notificationPermission !== 'granted' && notificationPermission !== 'denied' && (
-            <button
-              onClick={async () => {
-                try {
-                  const perm = await requestNotificationPermission();
-                  onStateChange({ ...state, notificationPermission: perm });
-                  if (perm === 'denied') alert("Notifications blocked by browser. Please enable them in site settings.");
-                } catch {
-                  alert("Notifications failed. Ensure you are using HTTPS or have added the app to your Home Screen.");
+          <button
+            onClick={async () => {
+              if (state.pushEnabled) {
+                // Turn OFF
+                onStateChange({ ...state, pushEnabled: false });
+              } else {
+                // Turn ON
+                if (notificationPermission !== 'granted') {
+                  try {
+                    const perm = await requestNotificationPermission();
+                    if (perm === 'granted') {
+                      onStateChange({ ...state, notificationPermission: perm, pushEnabled: true });
+                    } else if (perm === 'denied') {
+                      onStateChange({ ...state, notificationPermission: perm, pushEnabled: false });
+                      alert("Notifications blocked by browser. Please enable them in site settings.");
+                    }
+                  } catch {
+                    alert("Notifications failed. Ensure you are using HTTPS or have added the app to your Home Screen.");
+                  }
+                } else {
+                  onStateChange({ ...state, pushEnabled: true });
                 }
-              }}
-              style={{
-                padding: '8px 14px', borderRadius: 10,
-                background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.28)',
-                color: '#F59E0B', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-              }}
-            >
-              Enable
-            </button>
-          )}
-          {notificationPermission === 'granted' && (
-            <button
-              onClick={async () => {
-                const ok = await sendTestNotification();
-                if (!ok) alert("The browser blocked the test notification. You may need to add the app to your Home Screen or check 'Do Not Disturb' settings.");
-              }}
-              style={{
-                padding: '8px 14px', borderRadius: 10,
-                background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.28)',
-                color: '#10B981', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-              }}
-            >
-              Test
-            </button>
-          )}
+              }
+            }}
+            style={{
+              width: 50, height: 28, borderRadius: 16,
+              background: state.pushEnabled ? '#10B981' : 'rgba(255,255,255,0.1)',
+              border: state.pushEnabled ? '1px solid #34D399' : '1px solid rgba(255,255,255,0.2)',
+              position: 'relative', cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: state.pushEnabled ? '0 0 12px rgba(16,185,129,0.4)' : 'inset 0 1px 3px rgba(0,0,0,0.2)',
+            }}
+          >
+            <div style={{
+              width: 22, height: 22, borderRadius: '50%',
+              background: '#FFF',
+              position: 'absolute', top: 2, left: state.pushEnabled ? 24 : 2,
+              transition: 'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+            }} />
+          </button>
         </div>
       </motion.div>
-
       {/* ── 120Hz Liquid Mode ── */}
       <motion.div
         initial={{ opacity: 0, y: 14 }}

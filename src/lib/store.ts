@@ -23,6 +23,7 @@ export interface AppState {
   startDate: string | null;
   records: Record<string, DayRecord>;
   notificationPermission: 'default' | 'granted' | 'denied';
+  pushEnabled?: boolean;
   visitCount: number;
   highFps?: boolean;
 }
@@ -34,6 +35,7 @@ export const DEFAULT_STATE: AppState = {
   startDate: null,
   records: {},
   notificationPermission: 'default',
+  pushEnabled: false,
   visitCount: 0,
   highFps: false,
 };
@@ -68,6 +70,7 @@ export function mergeStates(local: AppState, cloud: AppState): AppState {
   return {
     tasks, locked, lockDate, startDate, records,
     notificationPermission: local.notificationPermission !== 'default' ? local.notificationPermission : cloud.notificationPermission,
+    pushEnabled: local.pushEnabled ?? cloud.pushEnabled,
     visitCount: Math.max(local.visitCount ?? 0, cloud.visitCount ?? 0),
     highFps: local.highFps ?? cloud.highFps,
   };
