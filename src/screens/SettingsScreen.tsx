@@ -236,7 +236,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
               )}
             </div>
             <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.45)', marginTop: 2 }}>
-              {state.pushEnabled ? 'Enabled — reminders active' : notificationPermission === 'denied' ? 'Denied in device browser settings' : 'Background reminders disabled'}
+              {state.pushEnabled ? 'Enabled — reminders active' : (notificationPermission === 'denied' || ('Notification' in window && Notification.permission === 'denied')) ? 'Denied in device browser settings' : 'Background reminders disabled'}
             </div>
           </div>
           <button
@@ -246,14 +246,15 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                 onStateChange({ ...state, pushEnabled: false });
               } else {
                 // Turn ON
-                if (notificationPermission !== 'granted') {
+                const sysPerm = 'Notification' in window ? Notification.permission : 'denied';
+                if (notificationPermission !== 'granted' || sysPerm !== 'granted') {
                   try {
                     const perm = await requestNotificationPermission();
                     if (perm === 'granted') {
                       onStateChange({ ...state, notificationPermission: perm, pushEnabled: true });
                     } else if (perm === 'denied') {
                       onStateChange({ ...state, notificationPermission: perm, pushEnabled: false });
-                      alert("Notifications blocked by browser. Please enable them in site settings.");
+                      alert("Notifications blocked! Please enable them manually in your device's browser site settings.");
                     }
                   } catch {
                     alert("Notifications failed. Ensure you are using HTTPS or have added the app to your Home Screen.");
