@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Settings, RefreshCw } from 'lucide-react';
+import { SlidersHorizontal, RefreshCw } from 'lucide-react';
 import type { AppState, DayRecord } from '../lib/store';
 import { getTodayString, getDayNumber, isTaskAvailable, formatTime12, getTaskStreak, getOverallStreak, getTotalCompletions, saveState, MOTIVATIONAL_PHRASES, pullFromCloud, mergeStates, pushToCloud, loadState } from '../lib/store';
 import ProgressRing from '../components/ProgressRing';
@@ -157,7 +157,7 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
             }}
             aria-label="Settings"
           >
-            <Settings size={17} />
+            <SlidersHorizontal size={17} />
           </motion.button>
         </div>
       </motion.div>
