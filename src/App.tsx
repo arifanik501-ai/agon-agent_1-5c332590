@@ -247,6 +247,32 @@ export default function App() {
 
   if (isDesktop) return <DesktopBlocker />;
 
+  if (!ready) {
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 18,
+        background: '#0F0F13', // Force dark background initially to prevent white flash
+      }}>
+        <div style={{
+          width: 56, height: 56, borderRadius: 18,
+          background: 'rgba(124,58,237,0.15)',
+          border: '1px solid rgba(124,58,237,0.3)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 40px rgba(124,58,237,0.4)',
+          animation: 'pulseScale 2s ease-in-out infinite',
+        }}>
+          <svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+            <rect x="5" y="11" width="14" height="10" rx="3" fill="rgba(124,58,237,0.15)" stroke="rgba(124,58,237,0.8)" strokeWidth={1.5} />
+            <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="rgba(124,58,237,0.8)" strokeWidth={1.5} strokeLinecap="round" />
+            <circle cx="12" cy="16" r="1.5" fill="rgba(124,58,237,0.8)" />
+          </svg>
+        </div>
+        <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.02em' }}>Loading data…</div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg)', position: 'relative', overflow: 'hidden' }}>
       <AmbientBackground />
@@ -268,31 +294,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Main */}
-      {authenticated && !ready && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 150,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 18,
-          background: 'var(--bg)',
-        }}>
-          <AmbientBackground />
-          <div style={{
-            width: 56, height: 56, borderRadius: 18,
-            background: 'var(--violet-dim)',
-            border: '1px solid var(--violet-border)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 40px var(--violet-glow)',
-            animation: 'pulseScale 2s ease-in-out infinite',
-          }}>
-            <svg width={24} height={24} viewBox="0 0 24 24" fill="none">
-              <rect x="5" y="11" width="14" height="10" rx="3" fill="var(--violet-dim)" stroke="var(--violet-lt)" strokeWidth={1.5} />
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="var(--violet-lt)" strokeWidth={1.5} strokeLinecap="round" />
-              <circle cx="12" cy="16" r="1.5" fill="var(--violet-lt)" />
-            </svg>
-          </div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-sub)', letterSpacing: '0.02em' }}>Loading your data…</div>
-        </div>
-      )}
+      {/* Main Container */}
 
       <div style={{ position: 'relative', zIndex: 1, minHeight: '100dvh' }}>
         <AnimatePresence>
