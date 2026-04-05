@@ -335,7 +335,7 @@ export default function App() {
       </div>
 
       <AnimatePresence>
-        {showLockConfirm && <LockConfirmModal taskCount={stateRef.current.tasks.length} onConfirm={handleLockConfirm} onCancel={() => setShowLockConfirm(false)} />}
+        {showLockConfirm && <LockConfirmModal taskCount={stateRef.current.tasks.length} onConfirm={handleLockConfirm} onCancel={() => setShowLockConfirm(false)} goalDate={stateRef.current.customStartDate} />}
       </AnimatePresence>
       <AnimatePresence>
         {showUnlock && <UnlockModal onUnlock={handleUnlock} onClose={() => setShowUnlock(false)} />}

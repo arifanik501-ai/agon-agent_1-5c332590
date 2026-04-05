@@ -107,22 +107,25 @@ export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : nul
 const database = getDatabase(app);
 
 // Debounce handle — always holds latest state ref
-let _debounceTimer: ReturnType<typeof setTimeout> | null = null;
+let _syncTimer: ReturnType<typeof setTimeout> | null = null;
 let _pending: AppState | null = null;
 
-/** Debounced cloud push — Instant sync (1000 ms) */
+const SYNC_INTERVAL = 30 * 60 * 1000; // 30 minutes
+
+/** Batched cloud push — syncs every 30 minutes */
 export function scheduleCloudSync(state: AppState): void {
   _pending = state;
-  emit('syncing');
-  if (_debounceTimer) clearTimeout(_debounceTimer);
-  _debounceTimer = setTimeout(async () => {
+  // Don't start a new timer if one is already running
+  if (_syncTimer) return;
+  _syncTimer = setTimeout(async () => {
     const toSave = _pending!;
     _pending = null;
-    _debounceTimer = null;
+    _syncTimer = null;
+    emit('syncing');
     const ok = await pushToCloud(toSave);
     emit(ok ? 'saved' : 'error');
     if (ok) setTimeout(() => emit('idle'), 2500);
-  }, 1000);
+  }, SYNC_INTERVAL);
 }
 
 /** Immediate push (no debounce) */

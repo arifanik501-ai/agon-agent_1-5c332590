@@ -91,7 +91,8 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
   const todayCompleted = tasks.filter(t => todayRecord.completions[t.id]).length;
   const overallStreak = getOverallStreak(records, tasks, startDate || today, currentDay);
   const dateStr = new Date(today + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  const phrase = isDemo ? "Demo mode active! Your official 30-day run starts on April 6th." : MOTIVATIONAL_PHRASES[(currentDay - 1) % 30];
+  const goalDateFormatted = (() => { const sd = state.customStartDate || startDate || today; const [gy, gm, gd] = sd.split('-').map(Number); return new Date(gy, gm - 1, gd).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }); })();
+  const phrase = isDemo ? `Demo mode active! Day 1 starts on ${goalDateFormatted}.` : MOTIVATIONAL_PHRASES[(currentDay - 1) % 30];
 
   // Glass stat card style
   const statCard = (_color: string, bgAlpha: string, borderAlpha: string) => ({
@@ -177,7 +178,19 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
               <>Day <span className="gradient-text">{currentDay}</span><span style={{ fontSize: 20, color: 'var(--text-faint)', fontWeight: 500 }}>/30</span></>
             )}
           </div>
-          <div style={{ fontSize: 13, color: 'var(--text-sub)', marginTop: 5 }}>{dateStr}</div>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            marginTop: 8, padding: '6px 16px',
+            borderRadius: 20,
+            background: 'var(--surface)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--glass-inner-shadow)',
+          }}>
+            <span style={{ fontSize: 13 }}>📅</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-sub)', letterSpacing: '0.01em' }}>{dateStr}</span>
+          </div>
           <div style={{ fontSize: 12, color: 'var(--violet-lt)', marginTop: 6, fontStyle: 'italic', opacity: 0.85 }}>"{phrase}"</div>
         </div>
 

@@ -1,8 +1,8 @@
 import { Lock, AlertTriangle } from 'lucide-react';
 
-interface Props { taskCount: number; onConfirm: () => void; onCancel: () => void; }
+interface Props { taskCount: number; onConfirm: () => void; onCancel: () => void; goalDate?: string; }
 
-export default function LockConfirmModal({ taskCount, onConfirm, onCancel }: Props) {
+export default function LockConfirmModal({ taskCount, onConfirm, onCancel, goalDate }: Props) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 400, display: 'flex', alignItems: 'flex-end', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
       role="dialog" aria-modal aria-label="Confirm lock">
@@ -17,7 +17,7 @@ export default function LockConfirmModal({ taskCount, onConfirm, onCancel }: Pro
           <h2 style={{ fontSize: 24, fontWeight: 900, color: 'var(--text)', margin: '0 0 10px' }}>Lock & Commit</h2>
           <p style={{ fontSize: 14, color: 'var(--text-sub)', lineHeight: 1.6, margin: 0 }}>
             Locking <strong style={{ color: 'var(--violet-lt)' }}>{taskCount} habit{taskCount !== 1 ? 's' : ''}</strong> for{' '}
-            <strong style={{ color: 'var(--violet-lt)' }}>30 consecutive days</strong> starting April 4, 2026.
+            <strong style={{ color: 'var(--violet-lt)' }}>30 consecutive days</strong> starting {(() => { const gd = goalDate || '2026-04-06'; const [gy, gm, gdd] = gd.split('-').map(Number); return new Date(gy, gm - 1, gdd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }); })()}.
           </p>
         </div>
         <div style={{ display: 'flex', gap: 10, padding: '14px', borderRadius: 12, background: 'var(--amber-dim)', border: '1px solid var(--amber-border)', marginBottom: 24 }}>

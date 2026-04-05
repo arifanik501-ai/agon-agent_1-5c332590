@@ -249,7 +249,7 @@ export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync
               style={{ width: '100%', padding: '18px', fontSize: 17, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
               <Lock size={20} /> Lock {tasks.length} Habit{tasks.length !== 1 ? 's' : ''} — 30 Days
             </button>
-            <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--text-faint)', marginTop: 10 }}>Starting April 4, 2026 · {tasks.length} habit{tasks.length !== 1 ? 's' : ''} · 30 days</p>
+            <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--text-faint)', marginTop: 10 }}>Starting {(() => { const gd = goalDate || '2026-04-06'; const [gy, gm, gdd] = gd.split('-').map(Number); return new Date(gy, gm - 1, gdd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }); })()} · {tasks.length} habit{tasks.length !== 1 ? 's' : ''} · 30 days</p>
           </motion.div>
         )}
       </AnimatePresence>
