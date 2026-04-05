@@ -111,7 +111,7 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
       <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.22,1,0.36,1] }}
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px 0', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
         <div>
-          <div style={{ fontSize: 11, color: 'var(--text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>LockIn</div>
+          <div style={{ fontSize: 11, color: 'var(--text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>30 Days Goal</div>
           <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-sub)', marginTop: 1 }}>
             {isDemo ? <span style={{ color: 'var(--amber)' }}>Demo Mode</span> : <>Day <span style={{ color: 'var(--violet-lt)' }}>{currentDay}</span> of 30</>}
           </div>

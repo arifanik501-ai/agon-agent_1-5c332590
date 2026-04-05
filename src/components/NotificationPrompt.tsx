@@ -13,7 +13,7 @@ export default function NotificationPrompt({ onAllow, onDeny }: Props) {
         </div>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)', margin: '0 0 10px' }}>Stay on Track</h2>
-          <p style={{ fontSize: 14, color: 'var(--text-sub)', lineHeight: 1.6, margin: 0 }}>Enable notifications so LockIn can remind you at each task's scheduled time — every day, for 30 days.</p>
+          <p style={{ fontSize: 14, color: 'var(--text-sub)', lineHeight: 1.6, margin: 0 }}>Enable notifications so 30 Days Goal can remind you at each task's scheduled time — every day, for 30 days.</p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <button onClick={onAllow} className="btn-primary" style={{ width: '100%', padding: '16px', fontSize: 16, fontWeight: 700 }}>Enable Reminders</button>

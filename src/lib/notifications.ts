@@ -245,7 +245,7 @@ export async function sendTestNotification(): Promise<boolean> {
         new Promise((_, reject) => setTimeout(() => reject(new Error('sw_timeout')), 1500))
       ]) as ServiceWorkerRegistration;
       
-      await reg.showNotification('🔒 LockIn — Test', {
+      await reg.showNotification('🔒 30 Days Goal — Test', {
         body: 'Push notifications are working perfectly!',
         icon: '/icon-192.png',
         badge: '/icon-192.png',
@@ -259,7 +259,7 @@ export async function sendTestNotification(): Promise<boolean> {
 
   // Fallback to desktop Notification API if SW hung or failed
   try {
-    new Notification('🔒 LockIn', { body: 'Test works (Desktop Fallback)!' });
+    new Notification('🔒 30 Days Goal', { body: 'Test works (Desktop Fallback)!' });
     return true;
   } catch {
     return false;

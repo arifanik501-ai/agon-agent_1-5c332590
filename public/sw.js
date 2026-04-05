@@ -140,7 +140,7 @@ self.addEventListener('push', (e) => {
   let data = {};
   try { data = e.data ? e.data.json() : {}; } catch {}
 
-  const title   = data.title  || '🔒 LockIn Reminder';
+  const title   = data.title  || '🔒 30 Days Goal Reminder';
   const options = {
     body:              data.body   || 'Time to complete your habit!',
     icon:              data.icon   || '/icon-192.png',

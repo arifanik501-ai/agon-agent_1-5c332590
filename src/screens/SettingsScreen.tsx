@@ -386,7 +386,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             <Smartphone size={20} color="#9B59F5" />
           </div>
           <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F0F8' }}>LockIn</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#F0F0F8' }}>30 Days Goal</div>
             <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.4)', marginTop: 2 }}>30-Day Habit Commitment · v2.0</div>
           </div>
         </div>

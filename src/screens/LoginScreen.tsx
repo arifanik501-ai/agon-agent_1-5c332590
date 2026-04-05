@@ -219,7 +219,7 @@ export default function LoginScreen({ onAuthenticated }: Props) {
 
         <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.45,duration:0.4 }}
           style={{ textAlign:'center', fontSize:11, color:'var(--text-faint)', margin:'22px 0 0', letterSpacing:'0.03em', position: 'relative', zIndex: 1 }}>
-          LockIn · 30-Day Habit System
+          30 Days Goal · 30-Day Habit System
         </motion.p>
       </motion.div>
     </div>

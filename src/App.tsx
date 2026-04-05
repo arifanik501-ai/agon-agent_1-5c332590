@@ -32,7 +32,7 @@ function DesktopBlocker() {
       <div style={{ maxWidth: 360, textAlign: 'center', padding: '48px 32px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24, backdropFilter: 'blur(20px)' }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>📱</div>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)', margin: '0 0 10px' }}>Mobile Only</h1>
-        <p style={{ fontSize: 14, color: 'var(--text-sub)', lineHeight: 1.6, margin: 0 }}>LockIn is designed exclusively for mobile devices. Please open this app on your phone.</p>
+        <p style={{ fontSize: 14, color: 'var(--text-sub)', lineHeight: 1.6, margin: 0 }}>30 Days Goal is designed exclusively for mobile devices. Please open this app on your phone.</p>
         <div style={{ marginTop: 20, fontSize: 12, color: 'var(--text-faint)' }}>Optimized for 360–414px screens</div>
       </div>
     </div>

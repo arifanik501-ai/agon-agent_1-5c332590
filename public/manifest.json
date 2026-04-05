@@ -1,6 +1,6 @@
 {
-  "name": "LockIn — 30-Day Habit Tracker",
-  "short_name": "LockIn",
+  "name": "30 Days Goal — 30-Day Habit Tracker",
+  "short_name": "30 Days Goal",
   "description": "30-day locked habit commitment system",
   "start_url": "/",
   "display": "standalone",
