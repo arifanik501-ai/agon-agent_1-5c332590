@@ -10,12 +10,13 @@ interface Props {
   onLock: () => void;
   onManualSync?: () => Promise<void>;
   onLogout?: () => void;
+  goalDate?: string;
 }
 
 interface TaskForm { name: string; hour: string; minute: string; period: 'AM' | 'PM'; description: string; }
 const emptyForm = (): TaskForm => ({ name: '', hour: '08', minute: '00', period: 'AM', description: '' });
 
-export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync, onLogout }: Props) {
+export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync, onLogout, goalDate }: Props) {
   const [form, setForm] = useState<TaskForm>(emptyForm());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(true);
@@ -93,7 +94,7 @@ export default function SetupScreen({ tasks, onTasksChange, onLock, onManualSync
         <div>
           <div style={{ fontSize: 11, color: 'var(--text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 6 }}>Setup Phase</div>
           <h1 style={{ fontSize: 28, fontWeight: 900, color: 'var(--text)', lineHeight: 1.1 }}>Build Your<br /><span className="gradient-text">Habit Lock</span></h1>
-          <p style={{ fontSize: 14, color: 'var(--text-sub)', marginTop: 10, lineHeight: 1.55 }}>Add habits and lock when ready — starts April 4, 2026.</p>
+          <p style={{ fontSize: 14, color: 'var(--text-sub)', marginTop: 10, lineHeight: 1.55 }}>Add habits and lock when ready — starts {(() => { const gd = goalDate || '2026-04-06'; const [gy, gm, gdd] = gd.split('-').map(Number); return new Date(gy, gm - 1, gdd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }); })()}.</p>
         </div>
         {onLogout && (
           <button 

@@ -309,6 +309,7 @@ export default function App() {
               onLock={() => setShowLockConfirm(true)} 
               onManualSync={handleManualSync} 
               onLogout={() => setActiveTab('dashboard')}
+              goalDate={state.customStartDate}
             />
           </div>
         ) : (
