@@ -43,7 +43,9 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 export default function StatsScreen({ state }: Props) {
   const { tasks, records, startDate } = state;
   const today = getTodayString();
-  const currentDay = startDate ? Math.max(1, Math.min(30, getDayNumber(startDate))) : 1;
+  const rawDayNum = startDate ? getDayNumber(startDate) : 1;
+  const isDemo = rawDayNum < 1;
+  const currentDay = isDemo ? 0 : Math.min(30, rawDayNum);
   const totalCompleted = getTotalCompletions(records);
   const totalPossible = 300;
   const overallRate = Math.round((totalCompleted / totalPossible) * 100);
@@ -137,7 +139,7 @@ export default function StatsScreen({ state }: Props) {
       {/* Summary cards */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
         {[
-          { label: 'Day', value: currentDay, suffix: '/30', color: '#9B59F5' },
+          { label: isDemo ? 'Demo Mode' : 'Day', value: isDemo ? 0 : currentDay, suffix: '/30', color: '#9B59F5' },
           { label: 'Done Today', value: (() => { const r = records[today]; return r ? tasks.filter(t => r.completions[t.id]).length : 0; })(), suffix: '/10', color: '#10B981' },
           { label: 'Best Day', value: bestDay.day, suffix: bestDay.day ? ` (${bestDay.count}/10)` : '', color: '#F59E0B' },
           { label: 'Total Done', value: totalCompleted, suffix: '', color: '#06B6D4' },

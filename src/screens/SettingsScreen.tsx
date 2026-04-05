@@ -14,14 +14,11 @@ interface Props {
 
 export default function SettingsScreen({ state, onStateChange, onUnlock, onBack }: Props) {
   const { tasks, locked, startDate, notificationPermission } = state;
-  const currentDay = startDate ? Math.max(1, Math.min(30, getDayNumber(startDate))) : 1;
+  const rawDayNum = startDate ? getDayNumber(startDate) : 1;
+  const isDemo = rawDayNum < 1;
+  const currentDay = isDemo ? 0 : Math.min(30, rawDayNum);
   const daysLeft = 30 - currentDay;
   const [syncState, setSyncState] = useState<'idle' | 'syncing' | 'done' | 'error'>('idle');
-
-  async function handleNotificationRequest() {
-    const perm = await requestNotificationPermission();
-    onStateChange({ ...state, notificationPermission: perm });
-  }
 
   async function handleSync() {
     if (syncState === 'syncing') return;
@@ -192,7 +189,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
               {locked ? 'Commitment Locked' : 'Not Locked'}
             </div>
             <div style={{ fontSize: 12, color: 'rgba(240,240,248,0.45)', marginTop: 2 }}>
-              {locked ? `Day ${currentDay}/30 · ${daysLeft} days remaining` : 'Complete setup to lock'}
+              {locked ? isDemo ? 'Demo Mode Active · Challenge starts soon' : `Day ${currentDay}/30 · ${daysLeft} days remaining` : 'Complete setup to lock'}
             </div>
           </div>
           {locked && (
