@@ -194,7 +194,9 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>Goal Start Date</div>
             <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
-              {locked ? 'Locked — change requires unlock' : 'Set when your 30-day challenge begins'}
+              {locked && startDate === state.customStartDate
+                ? `Active — ${isDemo ? 'Demo until goal date' : `Day ${currentDay}/30`}`
+                : locked ? 'Locked — unlock to change' : 'Set when your 30-day challenge begins'}
             </div>
           </div>
         </div>
@@ -205,12 +207,23 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
           const dateObj = new Date(y, m - 1, d);
           const formatted = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' });
 
+          const isConfirmed = locked && state.startDate === sd;
+
           const updateDate = (newY: number, newM: number, newD: number) => {
             const maxDay = new Date(newY, newM, 0).getDate();
             const safeD = Math.min(newD, maxDay);
             const val = `${newY}-${String(newM).padStart(2, '0')}-${String(safeD).padStart(2, '0')}`;
-            const ns = { ...state, customStartDate: val };
-            if (locked && state.startDate) ns.startDate = val;
+            onStateChange({ ...state, customStartDate: val });
+          };
+
+          const handleConfirm = () => {
+            const ns = {
+              ...state,
+              customStartDate: sd,
+              startDate: sd,
+              locked: true,
+              lockDate: new Date().toISOString(),
+            };
             onStateChange(ns);
           };
 
@@ -229,11 +242,11 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             fontSize: 15,
             textAlign: 'center' as const,
             padding: '12px 8px',
-            cursor: locked ? 'not-allowed' : 'pointer',
+            cursor: (locked && isConfirmed) ? 'not-allowed' : 'pointer',
             outline: 'none',
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)',
             transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
-            opacity: locked ? 0.5 : 1,
+            opacity: (locked && isConfirmed) ? 0.5 : 1,
           };
 
           return (
@@ -242,11 +255,11 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 padding: '10px 16px', marginBottom: 14,
                 borderRadius: 14,
-                background: 'rgba(245,158,11,0.06)',
-                border: '1px solid rgba(245,158,11,0.15)',
+                background: isConfirmed ? 'rgba(16,185,129,0.06)' : 'rgba(245,158,11,0.06)',
+                border: `1px solid ${isConfirmed ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.15)'}`,
               }}>
-                <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--amber)', letterSpacing: '0.01em' }}>
-                  📅 {formatted}
+                <span style={{ fontSize: 14, fontWeight: 600, color: isConfirmed ? 'var(--green)' : 'var(--amber)', letterSpacing: '0.01em' }}>
+                  {isConfirmed ? '✅' : '📅'} {formatted}
                 </span>
               </div>
 
@@ -256,7 +269,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                   <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Day</span>
                   <select
                     value={d}
-                    disabled={locked}
+                    disabled={locked && isConfirmed}
                     onChange={e => updateDate(y, m, Number(e.target.value))}
                     style={{ ...selectStyle, width: '100%' }}
                   >
@@ -273,7 +286,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                   <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Month</span>
                   <select
                     value={m}
-                    disabled={locked}
+                    disabled={locked && isConfirmed}
                     onChange={e => updateDate(y, Number(e.target.value), d)}
                     style={{ ...selectStyle, width: '100%' }}
                   >
@@ -290,7 +303,7 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                   <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Year</span>
                   <select
                     value={y}
-                    disabled={locked}
+                    disabled={locked && isConfirmed}
                     onChange={e => updateDate(Number(e.target.value), m, d)}
                     style={{ ...selectStyle, width: '100%' }}
                   >
@@ -300,6 +313,58 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
                   </select>
                 </div>
               </div>
+
+              {/* Confirm button */}
+              {!isConfirmed && tasks.length > 0 && (
+                <button
+                  onClick={handleConfirm}
+                  className="btn-primary"
+                  style={{
+                    width: '100%',
+                    marginTop: 16,
+                    padding: '14px',
+                    fontSize: 15,
+                    fontWeight: 700,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    background: 'linear-gradient(135deg, #F59E0B, #D97706)',
+                    border: '1px solid rgba(245,158,11,0.5)',
+                    borderRadius: 14,
+                    color: '#FFF',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 16px rgba(245,158,11,0.3)',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  ✓ Confirm & Start Goal
+                </button>
+              )}
+
+              {isConfirmed && (
+                <div style={{
+                  marginTop: 14, padding: '10px 14px', borderRadius: 12,
+                  background: 'rgba(16,185,129,0.06)',
+                  border: '1px solid rgba(16,185,129,0.18)',
+                  textAlign: 'center',
+                  fontSize: 12, color: 'var(--green)', fontWeight: 600,
+                }}>
+                  {isDemo
+                    ? `🕐 Demo Mode active — Day 1 starts on ${formatted}`
+                    : `🎯 Challenge is live — Day ${currentDay}/30`
+                  }
+                </div>
+              )}
+
+              {!isConfirmed && tasks.length === 0 && (
+                <div style={{
+                  marginTop: 14, padding: '10px', borderRadius: 12,
+                  background: 'rgba(239,68,68,0.06)',
+                  border: '1px solid rgba(239,68,68,0.15)',
+                  textAlign: 'center',
+                  fontSize: 12, color: 'var(--red)', fontWeight: 500,
+                }}>
+                  Add at least 1 habit before confirming
+                </div>
+              )}
             </>
           );
         })()}
