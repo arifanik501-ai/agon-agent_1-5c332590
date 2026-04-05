@@ -169,6 +169,142 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
         </div>
       </motion.div>
 
+      {/* ── Goal Start Date ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+        style={card}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
+          <div style={{
+            width: 44, height: 44, borderRadius: 12,
+            background: 'rgba(245,158,11,0.12)',
+            border: '1px solid rgba(245,158,11,0.28)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 0 16px rgba(245,158,11,0.1)',
+          }}>
+            <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>Goal Start Date</div>
+            <div style={{ fontSize: 12, color: 'var(--text-dim)', marginTop: 2 }}>
+              {locked ? 'Locked — change requires unlock' : 'Set when your 30-day challenge begins'}
+            </div>
+          </div>
+        </div>
+
+        {(() => {
+          const sd = state.customStartDate || '2026-04-06';
+          const [y, m, d] = sd.split('-').map(Number);
+          const dateObj = new Date(y, m - 1, d);
+          const formatted = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' });
+
+          const updateDate = (newY: number, newM: number, newD: number) => {
+            const maxDay = new Date(newY, newM, 0).getDate();
+            const safeD = Math.min(newD, maxDay);
+            const val = `${newY}-${String(newM).padStart(2, '0')}-${String(safeD).padStart(2, '0')}`;
+            const ns = { ...state, customStartDate: val };
+            if (locked && state.startDate) ns.startDate = val;
+            onStateChange(ns);
+          };
+
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+          const selectStyle: React.CSSProperties = {
+            appearance: 'none' as const,
+            background: 'var(--input-bg)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid var(--input-border)',
+            borderRadius: 14,
+            color: 'var(--text)',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 700,
+            fontSize: 15,
+            textAlign: 'center' as const,
+            padding: '12px 8px',
+            cursor: locked ? 'not-allowed' : 'pointer',
+            outline: 'none',
+            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)',
+            transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
+            opacity: locked ? 0.5 : 1,
+          };
+
+          return (
+            <>
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '10px 16px', marginBottom: 14,
+                borderRadius: 14,
+                background: 'rgba(245,158,11,0.06)',
+                border: '1px solid rgba(245,158,11,0.15)',
+              }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--amber)', letterSpacing: '0.01em' }}>
+                  📅 {formatted}
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                {/* Day */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Day</span>
+                  <select
+                    value={d}
+                    disabled={locked}
+                    onChange={e => updateDate(y, m, Number(e.target.value))}
+                    style={{ ...selectStyle, width: '100%' }}
+                  >
+                    {Array.from({ length: new Date(y, m, 0).getDate() }, (_, i) => (
+                      <option key={i + 1} value={i + 1}>{String(i + 1).padStart(2, '0')}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <span style={{ fontSize: 22, fontWeight: 300, color: 'var(--text-faint)', marginTop: 16 }}>/</span>
+
+                {/* Month */}
+                <div style={{ flex: 1.3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Month</span>
+                  <select
+                    value={m}
+                    disabled={locked}
+                    onChange={e => updateDate(y, Number(e.target.value), d)}
+                    style={{ ...selectStyle, width: '100%' }}
+                  >
+                    {months.map((mn, i) => (
+                      <option key={i + 1} value={i + 1}>{mn}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <span style={{ fontSize: 22, fontWeight: 300, color: 'var(--text-faint)', marginTop: 16 }}>/</span>
+
+                {/* Year */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Year</span>
+                  <select
+                    value={y}
+                    disabled={locked}
+                    onChange={e => updateDate(Number(e.target.value), m, d)}
+                    style={{ ...selectStyle, width: '100%' }}
+                  >
+                    {[2025, 2026, 2027, 2028, 2029, 2030].map(yr => (
+                      <option key={yr} value={yr}>{yr}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </>
+          );
+        })()}
+      </motion.div>
+
       {/* ── Lock status ── */}
       <motion.div
         initial={{ opacity: 0, y: 14 }}

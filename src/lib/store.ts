@@ -27,6 +27,7 @@ export interface AppState {
   visitCount: number;
   highFps?: boolean;
   lightMode?: boolean;
+  customStartDate?: string;
 }
 
 export const DEFAULT_STATE: AppState = {
@@ -40,6 +41,7 @@ export const DEFAULT_STATE: AppState = {
   visitCount: 0,
   highFps: false,
   lightMode: false,
+  customStartDate: '2026-04-06',
 };
 
 // ── localStorage helpers ─────────────────────────────────────────────────────
@@ -76,6 +78,7 @@ export function mergeStates(local: AppState, cloud: AppState): AppState {
     visitCount: Math.max(local.visitCount ?? 0, cloud.visitCount ?? 0),
     highFps: local.highFps ?? cloud.highFps,
     lightMode: local.lightMode ?? cloud.lightMode,
+    customStartDate: cloud.customStartDate ?? local.customStartDate ?? '2026-04-06',
   };
 }
 

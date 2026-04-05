@@ -23,7 +23,6 @@ import NotificationPrompt from './components/NotificationPrompt';
 import InAppAlarm from './components/InAppAlarm';
 
 type Tab = 'setup' | 'dashboard' | 'stats' | 'settings';
-const START_DATE = '2026-04-06';
 
 // ── Desktop blocker ──────────────────────────────────────────────────────────
 function DesktopBlocker() {
@@ -207,7 +206,8 @@ export default function App() {
 
   async function handleLockAnimComplete() {
     setShowLockAnim(false);
-    const ns: AppState = { ...stateRef.current, locked: true, lockDate: new Date().toISOString(), startDate: START_DATE };
+    const goalDate = stateRef.current.customStartDate || '2026-04-06';
+    const ns: AppState = { ...stateRef.current, locked: true, lockDate: new Date().toISOString(), startDate: goalDate };
     setState(ns); saveState(ns);
     setSyncStatus('syncing');
     const ok = await pushToCloud(ns);
