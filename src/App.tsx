@@ -23,7 +23,7 @@ import NotificationPrompt from './components/NotificationPrompt';
 import InAppAlarm from './components/InAppAlarm';
 
 type Tab = 'setup' | 'dashboard' | 'stats' | 'settings';
-const START_DATE = '2026-04-04';
+const START_DATE = '2026-04-06';
 
 // ── Desktop blocker ──────────────────────────────────────────────────────────
 function DesktopBlocker() {

@@ -18,7 +18,9 @@ interface Props {
 export default function DashboardScreen({ state, onStateChange, onUnlock, onRefresh }: Props) {
   const { tasks, records, startDate } = state;
   const today = getTodayString();
-  const currentDay = Math.max(1, Math.min(30, getDayNumber(startDate || today)));
+  const rawDayNum = getDayNumber(startDate || today);
+  const isDemo = rawDayNum < 1;
+  const currentDay = isDemo ? 0 : Math.min(30, rawDayNum);
   const todayRecord: DayRecord = records[today] || { date: today, completions: {}, missed: {} };
 
   const [selectedDay, setSelectedDay] = useState<{ num: number; date: string } | null>(null);
@@ -89,7 +91,7 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
   const todayCompleted = tasks.filter(t => todayRecord.completions[t.id]).length;
   const overallStreak = getOverallStreak(records, tasks, startDate || today, currentDay);
   const dateStr = new Date(today + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  const phrase = MOTIVATIONAL_PHRASES[(currentDay - 1) % 30];
+  const phrase = isDemo ? "Demo mode active! Your official 30-day run starts on April 6th." : MOTIVATIONAL_PHRASES[(currentDay - 1) % 30];
 
   // Glass stat card style
   const statCard = (_color: string, bgAlpha: string, borderAlpha: string) => ({
@@ -110,7 +112,9 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px 0', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
         <div>
           <div style={{ fontSize: 11, color: 'var(--text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>LockIn</div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-sub)', marginTop: 1 }}>Day <span style={{ color: 'var(--violet-lt)' }}>{currentDay}</span> of 30</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-sub)', marginTop: 1 }}>
+            {isDemo ? <span style={{ color: 'var(--amber)' }}>Demo Mode</span> : <>Day <span style={{ color: 'var(--violet-lt)' }}>{currentDay}</span> of 30</>}
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           {/* Refresh */}
@@ -167,8 +171,11 @@ export default function DashboardScreen({ state, onStateChange, onUnlock, onRefr
         </div>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 44, fontWeight: 900, lineHeight: 1, letterSpacing: '-0.03em', color: 'var(--text)' }}>
-            Day <span className="gradient-text">{currentDay}</span>
-            <span style={{ fontSize: 20, color: 'var(--text-faint)', fontWeight: 500 }}>/30</span>
+            {isDemo ? (
+              <span className="gradient-text" style={{ fontSize: 36 }}>Demo Day</span>
+            ) : (
+              <>Day <span className="gradient-text">{currentDay}</span><span style={{ fontSize: 20, color: 'var(--text-faint)', fontWeight: 500 }}>/30</span></>
+            )}
           </div>
           <div style={{ fontSize: 13, color: 'var(--text-sub)', marginTop: 5 }}>{dateStr}</div>
           <div style={{ fontSize: 12, color: 'var(--violet-lt)', marginTop: 6, fontStyle: 'italic', opacity: 0.85 }}>"{phrase}"</div>
