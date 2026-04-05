@@ -205,6 +205,8 @@ export default function SettingsScreen({ state, onStateChange, onUnlock, onBack 
             </button>
           )}
         </div>
+      </motion.div>
+      
       {/* ── Notifications ── */}
       <motion.div
         initial={{ opacity: 0, y: 14 }}
