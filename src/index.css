@@ -75,9 +75,9 @@ body.light {
   --border-glass: rgba(109,40,217,0.14);
 
   --text:         #1A1035;
-  --text-sub:     rgba(26,16,53,0.62);
-  --text-dim:     rgba(26,16,53,0.4);
-  --text-faint:   rgba(26,16,53,0.22);
+  --text-sub:     rgba(26,16,53,0.78);
+  --text-dim:     rgba(26,16,53,0.60);
+  --text-faint:   rgba(26,16,53,0.40);
 
   --violet:       #6D28D9;
   --violet-lt:    #7C3AED;
